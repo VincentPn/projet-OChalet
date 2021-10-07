@@ -1,0 +1,54 @@
+version: '3.7'
+services:
+    ochalet_redis:
+      container_name: ochalet_redis
+      networks:
+        - ochalet
+      image: redis
+
+    ochalet_postgres:
+      container_name: ochalet_postgres
+      hostname: ochalet_postgres
+      networks:
+        - ochalet
+      image: postgres
+      environment:
+        - POSTGRES_USER=ochalet
+        - POSTGRES_PASSWORD=ochalet
+        - POSTGRES_DB=ochalet
+
+    ochalet_api:
+      container_name: ochalet_api
+      networks:
+        - ochalet
+      build: ../api/
+      command: run dev
+      ports:
+        - 3000:3000
+      depends_on:
+        - ochalet_redis
+        - ochalet_postgres
+      environment:
+        - DATABASE_URL=postgres://ochalet:ochalet@ochalet_postgres:5432/ochalet
+        - REDIS_TLS_URL=redis://ochalet_redis:6379
+        - NODE_ENV=docker
+
+
+    ochalet_sqitch:
+      container_name: ochalet_sqitch
+      networks:
+        - ochalet
+      depends_on:
+        - ochalet_postgres
+      build: ../api/migrations
+      
+
+    
+      
+
+networks:
+  ochalet:
+    name: ochalet
+
+        
+
