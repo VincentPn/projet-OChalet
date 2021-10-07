@@ -1,0 +1,40 @@
+@host=http://localhost:3000
+
+
+
+# ------ MESSAGE
+
+### Get all messages
+GET {{host}}/messages
+
+### Get one messages
+GET {{host}}/messages/1
+
+### Create new message
+POST {{host}}/messages
+Content-Type: application/json
+
+{
+    "reservation_start": "2021-10-16 10:00:00+02",
+    "reservation_end": "2021-10-23 14:00:00+02",
+    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dapibus gravida vestibulum. Curabitur ac elit a elit mattis lobortis. Maecenas lacinia nisl ut accumsan venenatis. Vivamus at enim tempor, dapibus enim eget, ultrices elit. Aliquam efficitur eleifend odio, suscipit vestibulum ipsum.",
+    "offer_id": 2,
+    "user_id": 1
+}
+
+### Update message
+POST {{host}}/messages
+Content-Type: application/json
+
+{
+    "id": 5,
+    "reservation_start": "2021-10-16 10:00:00+02",
+    "reservation_end": "2021-10-23 14:00:00+02",
+    "body": "tototo ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dapibus gravida vestibulum. Curabitur ac elit a elit mattis lobortis. Maecenas lacinia nisl ut accumsan venenatis. Vivamus at enim tempor, dapibus enim eget, ultrices elit. Aliquam efficitur eleifend odio, suscipit vestibulum ipsum.",
+    "offer_id": 2,
+    "user_id": 1,
+    "message_status": false
+}
+
+### Delete one message
+DELETE {{host}}/messages/3

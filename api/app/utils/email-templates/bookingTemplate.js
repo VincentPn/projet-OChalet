@@ -1,0 +1,124 @@
+module.exports = (user, booking, offer) => {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,700;1,100;1,300;1,700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/1c3b8f2b56.js" crossorigin="anonymous"></script>
+    <title>Votre réservation</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        background-color: #333;
+        font-family: 'Roboto', sans-serif;
+        color: #EAEAEA;
+      }
+
+      header {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+
+      header img {
+        width: 200px;
+        margin-bottom: 2rem;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      main h1 {
+        text-align: center;
+      }
+
+      main table {
+        border-collapse: collapse;
+      }
+
+      main table thead tr td {
+        border-bottom: 1px solid #EAEAEA;
+        padding: 1rem;
+      }
+
+      main table tbody tr td {
+        padding: 1rem;
+      }
+
+      footer {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 2rem;
+      }
+
+      footer img {
+        width: 100px;
+        height: auto;
+        margin: 0 1rem;
+      }
+
+      footer p {
+        margin: 0 1rem;
+      }
+
+      footer p i {
+        margin-right: .4rem;
+      }
+    </style>
+  </head>
+  <body>
+
+    <header>
+      <a href="https://ochalet.surge.sh/" target="_blank">
+        <img src="https://ochalet.surge.sh/images/6010ed08a3c8a69a89f277cfe4987ee5.png" alt="">
+      </a>
+    </header>
+
+    <main>
+      <h1>Bonjour ${user.firstname} ${user.lastname}, merci pour votre réservation.</h1>
+      <h2>Récapitulatif de vos informations :</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <td>Numero de reservation</td>
+            <td>Date de réservation</td>
+            <td>Chalet</td>
+            <td>Prix TTC</td>
+          </tr>
+          
+        </thead>
+        <tbody>
+          <tr>
+            <td>${booking.id}</td>
+            <td>${booking.reservation_start}</td>
+            <td>${offer.title}</td>
+            <td>${offer.price_ht * offer.tax}€</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </main>
+
+    <footer>
+      <img src="https://ochalet.surge.sh/images/6010ed08a3c8a69a89f277cfe4987ee5.png" alt="">
+      <p><i class="fas fa-envelope"></i> ochaleto@gmail.com</p>
+      <p><i class="fas fa-phone"></i> 0178459620</p>
+    </footer>
+    
+  </body>
+  </html>`
+}

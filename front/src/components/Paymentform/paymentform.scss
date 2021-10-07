@@ -1,0 +1,26 @@
+#payment-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+  
+#card-element {
+    width: 500px;
+    padding: 1rem;
+    border-radius: .6rem .6rem 0 0;
+    background-color: #f0f8ffcb;
+    box-shadow: 0 0 20px #333;
+    color: #000;
+}
+
+#submit {
+    width: 500px;
+    padding: 1rem;
+    border-radius: 0 0 .6rem .6rem;
+    background-color: #a5673f;
+    color: #EAEAEA;
+    border: none;
+    margin-bottom: 2rem;
+}

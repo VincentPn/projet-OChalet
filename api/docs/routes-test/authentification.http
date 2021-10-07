@@ -1,0 +1,29 @@
+@host=http://localhost:3000
+
+
+
+# ------ SIGNUP
+
+### Create new user
+POST {{host}}/signup
+Content-Type: application/json
+
+{
+    "firstname": "Vincent",
+    "lastname": "PAYEN",
+    "email": "f@gmail.com",
+    "password": "Azerty123",
+    "passwordConfirm": "Azerty123"
+}
+
+
+# ------ SIGNIN
+
+### Update user
+POST {{host}}/signin
+Content-Type: application/json
+
+{
+    "email": "vpayen@gmail.com",
+    "password": "Azerty123"
+}

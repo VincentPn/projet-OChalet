@@ -1,0 +1,55 @@
+@host=http://localhost:3000
+
+
+
+# ------ OFFER
+
+### Get all offers
+GET {{host}}/offers
+
+### Get one offer
+GET {{host}}/offers/1
+
+### Create new offer
+POST {{host}}/offers
+Content-Type: application/json
+
+{
+    "title": "Ma cabane au fond du jardin",
+    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dapibus gravida vestibulum. Curabitur ac elit a elit mattis lobortis. Maecenas lacinia nisl ut accumsan venenatis. Vivamus at enim tempor, dapibus enim eget, ultrices elit. Aliquam efficitur eleifend odio, suscipit vestibulum ipsum.",
+    "zip_code": "22546",
+    "city_name": "Trifouillie-les-oies",
+    "country": "France",
+    "street_name": "rue des alouettes",
+    "street_number": "458",
+    "price_ht": 30000,
+    "tax": 30,
+    "main_picture": "https://images.pexels.com/photos/4558580/pexels-photo-4558580.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    "location_id": 3
+}
+
+### Update offer
+POST {{host}}/offers
+Content-Type: application/json
+
+{
+    "id": 4,
+    "title": "Ma cabane au fond du jardin",
+    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dapibus gravida vestibulum. Curabitur ac elit a elit mattis lobortis. Maecenas lacinia nisl ut accumsan venenatis. Vivamus at enim tempor, dapibus enim eget, ultrices elit. Aliquam efficitur eleifend odio, suscipit vestibulum ipsum.",
+    "zip_code": "22546",
+    "city_name": "Trifouillie-les-oies",
+    "country": "France",
+    "street_name": "rue des alouettes",
+    "street_number": "458",
+    "latitude": "687646.64768.02",
+    "longitude": "7458.4521.62",
+    "price_ht": 30000,
+    "tax": 30,
+    "main_picture": "https://images.pexels.com/photos/4558580/pexels-photo-4558580.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    "galery_picture_1": "https://images.pexels.com/photos/745054/pexels-photo-745054.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    "galery_picture_2": "https://images.pexels.com/photos/2422464/pexels-photo-2422464.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    "location_id": 3
+}
+
+### Delete one offer
+DELETE {{host}}/offers/4

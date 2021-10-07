@@ -1,0 +1,38 @@
+@host=http://localhost:3000
+
+
+
+
+# ------ COMMENT
+
+### Get all comments
+GET {{host}}/comments
+
+### Get one comment
+GET {{host}}/comments/3
+
+### Create new comment
+POST {{host}}/comments
+Content-Type: application/json
+
+{
+    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dapibus gravida vestibulum. Curabitur ac elit a elit mattis lobortis. Maecenas lacinia nisl ut accumsan venenatis. Vivamus at enim tempor, dapibus enim eget, ultrices elit. Aliquam efficitur eleifend odio, suscipit vestibulum ipsum.",
+    "note": 5,
+    "offer_id": 2,
+    "user_id": 1
+}
+
+### Update comment
+POST {{host}}/comments
+Content-Type: application/json
+
+{
+    "id": 4,
+    "body": "Lorem ipsum dolor sit amet.",
+    "note": 2,
+    "offer_id": 2,
+    "user_id": 1
+}
+
+### Delete one comment
+DELETE {{host}}/comments/4

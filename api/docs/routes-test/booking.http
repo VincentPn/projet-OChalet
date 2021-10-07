@@ -1,0 +1,40 @@
+@host=http://localhost:3000
+
+
+
+# ------ BOOKING
+
+### Get all bookings
+GET {{host}}/bookings
+
+### Get one booking
+GET {{host}}/bookings/1
+
+### Create new booking
+POST {{host}}/bookings
+Content-Type: application/json
+
+{
+    "reservation_start": "2021-10-16 04:00:00+02",
+    "reservation_end": "2021-10-23 18:00:00+02",
+    "offer_id": 2,
+    "user_id": 1
+}
+
+### Update booking
+POST {{host}}/bookings
+Content-Type: application/json
+
+{
+    "id": 4,
+    "reservation_start": "2021-11-16 19:00:00+02",
+    "reservation_end": "2021-11-23 20:00:00+02",
+    "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus dapibus gravida vestibulum. Curabitur ac elit a elit mattis lobortis. Maecenas lacinia nisl ut accumsan venenatis. Vivamus at enim tempor, dapibus enim eget, ultrices elit. Aliquam efficitur eleifend odio, suscipit vestibulum ipsum.",
+    "reservation_status": true,
+    "offer_id": 2,
+    "user_id": 1
+}
+
+### Delete one booking
+DELETE {{host}}/bookings/3
+

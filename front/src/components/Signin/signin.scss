@@ -1,0 +1,27 @@
+.signin{
+  flex: 1;
+  margin: 3rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__form{
+    width: 500px;
+  
+    &__buttons{
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
+
+.ui.form .field>label {
+  color: #f1f1f1;
+  text-shadow: 0 0 3px #000;
+}
+
+@media screen and (max-width: 550px) {
+  .signin__form {
+    width: 300px;
+  }
+}

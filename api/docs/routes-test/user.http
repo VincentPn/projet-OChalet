@@ -1,0 +1,27 @@
+@host=http://localhost:3000
+
+
+
+# ------ USER
+
+### Get all users
+GET {{host}}/user
+
+### Get one user
+GET {{host}}/user/78
+
+
+### Update user
+POST {{host}}/user
+Content-Type: application/json
+
+{
+    "id": 6,
+    "firstname": "Maurice",
+    "lastname": "Montana",
+    "email": "toto@montana.ca",
+    "password": "Qwerty123"
+}
+
+### Delete one user
+DELETE {{host}}/user/12

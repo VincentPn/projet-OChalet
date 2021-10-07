@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+.offer{
+  display: flex;
+  flex-direction: column;
+
+  &__header{
+    padding-top: 2rem;
+
+    &__title{
+      font-family: 'Patrick Hand', cursive;
+      font-size: 3rem;
+      font-weight: bold;
+      text-align: center;
+      color: #EAEAEA;
+    }
+  
+    &__city{
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      font-weight: 100;
+      text-align: center;
+      color: #EAEAEA;
+    }
+
+    &__pictures{
+      width: 900px;
+      height: 500px;
+      margin: 2rem auto;
+      border-radius: .6rem;
+      overflow: hidden;
+    }
+  }
+
+  &__main{
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: 3rem auto;
+    
+    &__description {
+      width: 50%;
+      padding: 2rem;
+      background-color: #f0f8ffa8;
+      border-radius: .6rem;
+
+      & p {
+        margin: 1rem 0;
+      }
+
+      & table {
+        margin-left: 1.1rem;
+        & tr {
+          border-bottom: 1px solid #EAEAEA;
+          & td {
+            padding: .4rem .8rem;
+          }
+        }
+      }
+
+      & ul {
+        margin-left: 1.1rem;
+        list-style: disc;
+      }
+
+      & ol {
+        margin-left: 1.1rem;
+        list-style: decimal;
+      }
+
+      & strong {
+        font-weight: bold;
+      }
+
+      & i {
+        font-style: italic;
+      }
+
+    }
+
+    &__calendar{
+      
+     
+      &__item {
+        border-radius: .6rem;
+        box-shadow: 0 0 30px #333;
+      }
+    }
+
+    &__buttons{
+      width: 40%;
+      margin: 2rem auto;
+      display: flex;
+      justify-content:space-evenly;
+      align-items: center;
+      margin-bottom: 3rem;
+    }
+  }
+
+  .rdrDayDisabled {
+    background-color: rgba(104, 99, 99, 0.137);
+  }
+
+  
+}
