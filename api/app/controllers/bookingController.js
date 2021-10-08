@@ -1,7 +1,7 @@
 const {Booking, User, Offer} = require('../models');
-const sendMail = require("../services/nodemail")
-const bookingMailTemplate = require('../utils/email-templates/bookingTemplate')
-const {stripe} = require('../services/stripe2')
+const sendMail = require("../services/nodemail");
+const bookingMailTemplate = require('../utils/email-templates/bookingTemplate');
+const {stripe} = require('../services/stripe2');
 
 const bookingController = {
 

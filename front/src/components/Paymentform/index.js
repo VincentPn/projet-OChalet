@@ -65,8 +65,8 @@ export default function Paymentform2() {
         }
       },
       invalid: {
-        color: '#fa755a',
-        iconColor: '#fa755a'
+        color: '#bf3636',
+        iconColor: '#bf3636'
       }
     }
   };
@@ -104,6 +104,7 @@ export default function Paymentform2() {
 
   return (
     <form id='payment-form' onSubmit={handleSubmit}>
+      <h2>Paiement</h2>
       <CardElement id='card-element' options={cardStyle} onChange={handleChange} />
       <button
         disabled={processing || disabled || succeeded}
@@ -113,7 +114,7 @@ export default function Paymentform2() {
           {processing ? (
             <div className='spinner' id='spinner'></div>
           ) : (
-            'Pay now'
+            'Payer'
           )}
         </span>
       </button>
@@ -125,13 +126,13 @@ export default function Paymentform2() {
       )}
       {/* Show a success message upon completion */}
       <p className={succeeded ? 'result-message' : 'result-message hidden'}>
-        Payment succeeded, see the result in your
+        Paiement réussi !
         <a
           href={`https://dashboard.stripe.com/test/payments`}
         >
           {' '}
           Stripe dashboard.
-        </a> Refresh the page to pay again.
+        </a> Actualiser la page pour payer à nouveau.
       </p>
     </form>
   );

@@ -12,6 +12,7 @@
     
 
     &__card{
+      position: relative;
       display: flex;
       flex-direction: column;
       margin: 2rem;
@@ -39,8 +40,9 @@
   
       &__title{
         position: absolute;
+        top: 0;
         font-size: 1.4rem;
-        padding: 1rem ;
+        padding: 0 1rem;
         // font-family: 'Patrick Hand', cursive;
         font-family: 'Roboto', sans-serif;
         color: #EAEAEA;

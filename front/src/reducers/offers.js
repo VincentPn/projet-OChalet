@@ -19,7 +19,7 @@ export const initialState = {
   locations: [],
   newoffer: {
     title: '',
-    body: '',
+    body: '<h2>Description</h2><p>[insérer le texte ici]</p><h2>Prestations</h2><table><tbody><tr><td><img src="https://img.icons8.com/ios-filled/30/000000/dog.png"/></td><td>Animaux autorisés</td></tr><tr><td><img src="https://img.icons8.com/glyph-neue/30/000000/wifi.png"/></td><td>Internet / Wifi</td></tr><tr><td><img src="https://img.icons8.com/ios-filled/30/000000/housekeeping.png"/></td><td>Ménage compris</td></tr><tr><td><img src="https://img.icons8.com/external-vitaliy-gorbachev-fill-vitaly-gorbachev/30/000000/external-croissant-fast-food-vitaliy-gorbachev-fill-vitaly-gorbachev.png"/></td><td>Petit-déjeuner en supplément</td></tr></tbody></table><h2>Informations complémentaires</h2><p>[insérer le texte ici]</p>',
     zip_code: '',
     city_name: '',
     country: '',

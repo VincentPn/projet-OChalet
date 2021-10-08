@@ -214,7 +214,7 @@ export default (store) => (next) => async (action) => {
     case FETCH_OFFER: {
       axiosInstance
         .get(
-          `/offers/${action.offerId}`,
+          `/offers?id=${action.offerId}`,
         )
         .then(
           (response) => {
