@@ -11,11 +11,13 @@ services:
       hostname: ochalet_postgres
       networks:
         - ochalet
-      image: postgres
+      image: postgres:13.4
       environment:
         - POSTGRES_USER=ochalet
         - POSTGRES_PASSWORD=ochalet
         - POSTGRES_DB=ochalet
+      volumes:
+        - ../db-dump/:/home
 
     ochalet_api:
       container_name: ochalet_api
@@ -35,13 +37,14 @@ services:
         - PORT=3000
 
 
-    ochalet_sqitch:
-      container_name: ochalet_sqitch
-      networks:
-        - ochalet
-      depends_on:
-        - ochalet_postgres
-      build: ../api/migrations
+    # ochalet_sqitch:
+    #   container_name: ochalet_sqitch
+    #   networks:
+    #     - ochalet
+    #   depends_on:
+    #     - ochalet_postgres
+    #   build: ../api/migrations
+      
       
 
 networks:
