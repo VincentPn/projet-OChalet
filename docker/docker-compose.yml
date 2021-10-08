@@ -16,6 +16,8 @@ services:
         - POSTGRES_USER=ochalet
         - POSTGRES_PASSWORD=ochalet
         - POSTGRES_DB=ochalet
+      volumes: 
+        - ../api/data/:/usr/src/app/
 
     ochalet_api:
       container_name: ochalet_api
@@ -42,8 +44,7 @@ services:
       depends_on:
         - ochalet_postgres
       build: ../api/migrations
-      volumes: 
-        - ../api/data/:/usr/src/app/
+      
         
       
 
