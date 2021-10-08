@@ -12,7 +12,7 @@ if(process.env.NODE_ENV !== "docker"){
     }
     setTimeout(() => {
         pool = new Pool(config);
-    }, 1000);
+    }, 3000);
 }
 
 pool = new Pool(config);
