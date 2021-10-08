@@ -32,6 +32,7 @@ services:
         - DATABASE_URL=postgres://ochalet:ochalet@ochalet_postgres:5432/ochalet
         - REDIS_TLS_URL=redis://ochalet_redis:6379
         - NODE_ENV=docker
+        - PORT=3000
 
 
     ochalet_sqitch:
