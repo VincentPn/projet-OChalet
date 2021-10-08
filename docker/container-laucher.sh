@@ -5,7 +5,7 @@ docker exec -it ochalet_api sh "migrations/sqitch-init.sh"
 docker cp ./db_dump.sh ochalet_postgres:/db_dump.sh
 
 crontab -l > db_dump_cron
-echo "*/1 * * * * /bin/sh /root/linode-test/docker/backup-moving.sh >> /root/linode-test/docker/backup-moving.log 2>&1"
+echo "*/1 * * * * /bin/sh /root/linode-test/docker/backup-moving.sh >> /root/linode-test/docker/backup-moving.log 2>&1" >> db_dump_cron
 crontab db_dump_cron
 rm db_dump_cron
 
