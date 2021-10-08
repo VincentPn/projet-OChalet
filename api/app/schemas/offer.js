@@ -52,8 +52,8 @@ module.exports = {
 
   filterByTitle: Joi.object({
     title: Joi.string(), 
-    location_id: Joi.number().positive(),
-    id: Joi.number().positive()
+    location_id: Joi.string(),
+    id: Joi.string()
   }),
 
   deleteOffer: Joi.object({
