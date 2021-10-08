@@ -1,6 +1,8 @@
 # build et lance tous les containers
 docker-compose -p ochalet_stack up --build -d
 sleep 1
+apt-get update
+apt-get install rsync -y
 docker exec -it ochalet_api sh "migrations/sqitch-init.sh" 
 docker cp ./db_dump.sh ochalet_postgres:/db_dump.sh
 
