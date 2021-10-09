@@ -9,5 +9,5 @@ echo "dump sent on backup server !"
 echo "deleting files older than 3 days..."
 docker exec -i ochalet_postgres bash -c "find /home/ -type f -ctime +3 -execdir rm -- '{}' \;"
 
-
+yes
 

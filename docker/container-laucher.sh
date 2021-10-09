@@ -33,7 +33,7 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen -P ''"
 
 #script de dump de la bdd
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch test.sh && chmod +x backup-moving.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch backup-moving.sh && chmod +x backup-moving.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"db dump in progress ...\"' >> backup-moving.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'DATE=\$(date +\"%F-%H:%M\")' >> backup-moving.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> backup-moving.sh"
@@ -65,5 +65,7 @@ iptables -A OUTPUT -p tcp --dport 9443 -j ACCEPT
 #affiche la clé ssh et attend que l'utilisateur presse "entrer" pour verifier si la connexion ssh s'établie
 echo "${green_text}COPY THIS CONTAINER SSH KEY${reset_color}"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
+echo "${green_text}----------------------------------------------------------------------------------${reset_color}"
+
 read -p "Press enter to confirm ssh key added in authorized keys in your backup server"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo y | ssh -p $BACKUP_SERVER_SSH_PORT $DB_DUMP_BACKUP_SERVER && send \"exit\" "
