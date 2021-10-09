@@ -45,13 +45,16 @@ services:
       image: debian:stable-slim
       command: "tail -f /dev/null"
       volumes:
-        - ../db-dump:/home/
+        - db-dump:/home/
 
       
     
 networks:
   ochalet:
     name: ochalet
+
+volumes:
+  db_dump:
 
 
         
