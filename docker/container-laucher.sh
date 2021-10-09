@@ -1,4 +1,6 @@
 #definition des variables
+green_text=`tput setaf 2`
+reset_color=`tput sgr0`
 DB_URI="ochalet:ochalet@ochalet_postgres:5432/ochalet"
 REPO_NAME="linode-test"
 DEBIAN_CONTAINER_NAME="ochalet_debian"
@@ -11,7 +13,7 @@ docker-compose -f $PATH_TO_COMPOSE_FILE -p ochalet_stack up --build -d
 sleep 1
 
 #installe sqitch dans le container debian sur le meme network que l'api
-docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch cron rsync -y"
+docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch cron rsync openssh-server -y"
 
 #copie des fichiers necessaires pour sqitch
 docker cp $PATH_TO_REPO$REPO_NAME/api/migrations $DEBIAN_CONTAINER_NAME:/usr/src/
@@ -24,9 +26,13 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "sqitch deploy"
 #seeding de la base de donné avec le fichier de seeding
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/src/seeding.sql"
 
-#dump de la bdd avec la date actuelle dans le dossier /home du container
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\_$(date +"%F-%H:%M").sql"
+#ssh key generating
+docker exec -it ochalet_debian bash -c "echo y | ssh-keygen"
 
+CONTAINER_SSH_KEY = docker exec -it ochalet_debian bash -c "echo /root/.ssh/id_rsa.pub"
+
+
+#script de dump de la bdd
 docker exec -it ochalet_debian bash -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> test.sh"
 
@@ -49,3 +55,4 @@ iptables -A INPUT -p tcp --dport 9443 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 3000 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 9443 -j ACCEPT
 
+echo  -e "COPY THIS CONTAINER SSH KEY\n${green_text}$CONTAINER_SSH_KEY${reset_color}"
