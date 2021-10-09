@@ -7,6 +7,8 @@ DEBIAN_CONTAINER_NAME="ochalet_debian"
 POSTGRES_CONTAINER_NAME="ochalet_postgres"
 PATH_TO_REPO="/root/"
 PATH_TO_COMPOSE_FILE="/root/linode-test/docker/docker-compose.yml"
+DB_DUMP_BACKUP_SERVER="pi@rpiweb.hopto.org:/home/pi/test2/"
+BACKUP_SERVER_SSH_PORT="5000"
 
 # build et lance tous les containers
 docker-compose -f $PATH_TO_COMPOSE_FILE -p ochalet_stack up --build -d
@@ -26,13 +28,18 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "sqitch deploy"
 #seeding de la base de donné avec le fichier de seeding
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/src/seeding.sql"
 
-#ssh key generating
+#generation des clés ssh
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen -P ''"
 
 #script de dump de la bdd
-docker exec -it ochalet_debian bash -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch test.sh && chmod +x test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'db dump in progress ...' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> test.sh"
 
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'sending dump for backup..' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'rsync --delete -avrhe `ssh -p $BACKUP_SERVER_SSH_PORT` /home/ $DB_DUMP_BACKUP_SERVER' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'dump sent on backup server !' >> test.sh"
 
 
 #mise en place du cronjob pour effectuer les dump et les 
