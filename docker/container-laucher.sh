@@ -9,9 +9,6 @@ PATH_TO_COMPOSE_FILE="/root/linode-test/docker/docker-compose.yml"
 # build et lance tous les containers
 docker-compose -f $PATH_TO_COMPOSE_FILE -p ochalet_stack up --build -d
 sleep 1
-# #installation rsync et cron sur la vm cloud
-# apt-get update
-# apt-get install rsync cron -y
 
 #installe sqitch dans le container debian sur le meme network que l'api
 docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch cron rsync -y"
@@ -32,7 +29,7 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "pg_dump postgres://$DB_URI > /ho
 
 #mise en place du cronjob pour effectuer les dump et les 
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch db_dump_cron"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '*/1 * * * * /bin/sh /root/linode-test/docker/backup-moving.sh >> /root/linode-test/docker/backup-moving.log 2>&1' >> db_dump_cron"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '*/1 * * * * /backup-moving.sh >> /backup-moving.log 2>&1' >> db_dump_cron"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "crontab db_dump_cron && rm db_dump_cron" 
 
 
