@@ -7,7 +7,8 @@ DEBIAN_CONTAINER_NAME="ochalet_debian"
 POSTGRES_CONTAINER_NAME="ochalet_postgres"
 PATH_TO_REPO="/root/"
 PATH_TO_COMPOSE_FILE="/root/linode-test/docker/docker-compose.yml"
-DB_DUMP_BACKUP_SERVER="pi@rpiweb.hopto.org:/home/pi/test2/"
+DB_DUMP_BACKUP_SERVER="pi@rpiweb.hopto.org"
+PATH_TO_STORAGE_BACKUPS="/home/pi/test2"
 BACKUP_SERVER_SSH_PORT="5000"
 
 # build et lance tous les containers
@@ -32,14 +33,15 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen -P ''"
 
 #script de dump de la bdd
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch test.sh && chmod +x test.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"db dump in progress ...\"' >> test.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch test.sh && chmod +x backup-moving.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"db dump in progress ...\"' >> backup-moving.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'DATE=\$(date +\"%F-%H:%M\")' >> backup-moving.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> backup-moving.sh"
 
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"sending dump for backup..\"' >> test.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'rsync --delete -avrhe \"ssh -p $BACKUP_SERVER_SSH_PORT\" /home/ $DB_DUMP_BACKUP_SERVER' >> test.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"dump sent on backup server !\"' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"sending dump for backup..\"' >> backup-moving.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'rsync --delete -avrhe \"ssh -p $BACKUP_SERVER_SSH_PORT\" /home/ $DB_DUMP_BACKUP_SERVER:$PATH_TO_STORAGE_BACKUPS' >> backup-moving.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"dump sent on backup server !\"' >> backup-moving.sh"
+
 
 
 #mise en place du cronjob pour effectuer les dump et les 
@@ -60,6 +62,8 @@ iptables -A OUTPUT -p tcp --dport 3000 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 9443 -j ACCEPT
 
 
-
+#affiche la clé ssh et attend que l'utilisateur presse "entrer" pour verifier si la connexion ssh s'établie
 echo "${green_text}COPY THIS CONTAINER SSH KEY${reset_color}"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
+read -p "Press enter to confirm ssh key added in authorized keys in your backup server"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo y | ssh -p $BACKUP_SERVER_SSH_PORT $DB_DUMP_BACKUP_SERVER && send \"exit\" "
