@@ -45,7 +45,7 @@ services:
       image: debian:stable-slim
       command: "tail -f /dev/null"
       volumes:
-        - db-dump:/home/
+        - db_dump:/home/
 
       
     
