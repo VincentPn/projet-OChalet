@@ -24,6 +24,7 @@ services:
       networks:
         - ochalet
       build: ../api/
+      image: ochalet_api:v1.0.0
       command: run dev
       ports:
         - 3000:3000
@@ -44,16 +45,16 @@ services:
       image: debian:stable-slim
       command: "tail -f /dev/null"
 
-    portainer:
-      image: portainer/portainer-ce:latest
-      container_name: portainer
-      restart: always
-      ports: 
-        - 8000:8000
-        - 9443:9443
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
-        - portainer_data:/data
+    # portainer:
+    #   image: portainer/portainer-ce:latest
+    #   container_name: portainer
+    #   restart: always
+    #   ports: 
+    #     - 8000:8000
+    #     - 9443:9443
+    #   volumes:
+    #     - /var/run/docker.sock:/var/run/docker.sock
+    #     - portainer_data:/data
       
       
 
