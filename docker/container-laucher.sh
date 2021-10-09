@@ -3,9 +3,11 @@ DB_URI="ochalet:ochalet@ochalet_postgres:5432/ochalet"
 REPO_NAME="linode-test"
 DEBIAN_CONTAINER_NAME="ochalet_debian"
 POSTGRES_CONTAINER_NAME="ochalet_postgres"
+PATH_TO_REPO="/root/"
+PATH_TO_COMPOSE_FILE="/root/linode-test/docker/docker-compose.yml"
 
 # build et lance tous les containers
-docker-compose -p ochalet_stack up --build -d
+docker-compose -f $PATH_TO_COMPOSE_FILE -p ochalet_stack up --build -d
 sleep 1
 #installation rsync et cron sur la vm cloud
 apt-get update
@@ -15,8 +17,8 @@ apt-get install rsync cron -y
 docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch -y"
 
 #copie des fichiers necessaires pour sqitch
-docker cp /root/$REPO_NAME/api/migrations $DEBIAN_CONTAINER_NAME:/usr/src/
-docker cp /root/$REPO_NAME/api/data/seeding.sql $DEBIAN_CONTAINER_NAME:/usr/src/
+docker cp $PATH_TO_REPO$REPO_NAME/api/migrations $DEBIAN_CONTAINER_NAME:/usr/src/
+docker cp $PATH_TO_REPO$REPO_NAME/api/data/seeding.sql $DEBIAN_CONTAINER_NAME:/usr/src/
 
 #deploiement de la structure de la base de donnée via sqitch
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "sqitch init ochalet --target db:pg://$DB_URI --top-dir /usr/src/migrations"
