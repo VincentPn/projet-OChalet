@@ -28,7 +28,7 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\_$(date +"%F-%H:%M").sql"
 
 docker exec -it ochalet_debian bash -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME_\$DATE.sql' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> test.sh"
 
 
 
