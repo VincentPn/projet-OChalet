@@ -62,6 +62,16 @@ echo "${green_text}COPY THIS CONTAINER SSH KEY TO YOUR BACKUP SERVER \"authorize
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
 echo "${green_text}------------------------------------------------------------------------------------${reset_color}"
 
-read -n 1 -p "Press \"y\" when ssh key added in authorized keys in your backup server" answer
+read -p "Press \"yes\" when ssh key added in authorized keys in your backup server"
+select result in yes y
+do
+    if [$result = /[y]es/]
+    then 
+    echo "BINGOOO"
+    else
+    echo "NOOOOOO"
+    fi
+done
+
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo yes | ssh -p $BACKUP_SERVER_SSH_PORT $DB_DUMP_BACKUP_SERVER"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "ssh -p $BACKUP_SERVER_SSH_PORT -q $DB_DUMP_BACKUP_SERVER exit if [echo \$? = 0] then echo \"connection estasblished\" else echo \"connection NOT established\" fi"
