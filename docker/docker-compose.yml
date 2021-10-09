@@ -45,8 +45,7 @@ services:
 
     portainer:
       image: portainer/portainer-ce:latest
-      restart:
-        - always
+      restart: always
       ports: 
         - 8000:8000
         - 9443:9443
