@@ -11,7 +11,7 @@ docker-compose -f $PATH_TO_COMPOSE_FILE -p ochalet_stack up --build -d
 sleep 1
 
 #installe sqitch dans le container debian sur le meme network que l'api
-docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch cron rsync nano-tiny -y"
+docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch cron rsync -y"
 
 #copie des fichiers necessaires pour sqitch
 docker cp $PATH_TO_REPO$REPO_NAME/api/migrations $DEBIAN_CONTAINER_NAME:/usr/src/
