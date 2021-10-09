@@ -27,9 +27,8 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "sqitch deploy"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/src/seeding.sql"
 
 #ssh key generating
-docker exec -it ochalet_debian bash -c "echo y | ssh-keygen"
-
-CONTAINER_SSH_KEY = docker exec -it ochalet_debian bash -c "echo /root/.ssh/id_rsa.pub"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen"
+CONTAINER_SSH_KEY = docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
 
 
 #script de dump de la bdd
@@ -55,4 +54,4 @@ iptables -A INPUT -p tcp --dport 9443 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 3000 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 9443 -j ACCEPT
 
-echo  -e "COPY THIS CONTAINER SSH KEY\n${green_text}$CONTAINER_SSH_KEY${reset_color}"
+echo "COPY THIS CONTAINER SSH KEY\n${green_text}$CONTAINER_SSH_KEY${reset_color}"
