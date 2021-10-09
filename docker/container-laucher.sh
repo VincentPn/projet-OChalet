@@ -63,7 +63,7 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
 echo "${green_text}------------------------------------------------------------------------------------${reset_color}"
 
 while true; do
-    read -p "Press \"yes\" when ssh key added in authorized keys in your backup server" yn
+    read -p "Press \"yes\" when ssh key added in authorized keys in your backup server\n" yn
     case $yn in
         [Yy]* ) break;;
         [Nn]* ) exit;;
@@ -71,5 +71,11 @@ while true; do
     esac
 done
 
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "ssh -o StrictHostKeyChecking=no -p $BACKUP_SERVER_SSH_PORT -q $DB_DUMP_BACKUP_SERVER exit"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "ssh -o StrictHostKeyChecking=no -p $BACKUP_SERVER_SSH_PORT -q $DB_DUMP_BACKUP_SERVER exit; if [echo \$? = 0]; then echo \"connection estasblished\"; else echo \"connection NOT established\"; fi"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch ssh-check.sh && chmod +x ssh-check.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'ssh -o StrictHostKeyChecking=no -p $BACKUP_SERVER_SSH_PORT -q $DB_DUMP_BACKUP_SERVER exit' >> ssh-check.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'if [ \$? != \"0\" ]; then' >> ssh-check.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"Connection failed\"' >> ssh-check.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'else' >> ssh-check.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"Connection established\"' >> ssh-check.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'fi' >> ssh-check.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME sh "ssh-check.sh"
