@@ -42,6 +42,7 @@ services:
       networks:
         - ochalet
       image: debian:stable-slim
+      command: "tail -f /dev/null"
 
     portainer:
       image: portainer/portainer-ce:latest
