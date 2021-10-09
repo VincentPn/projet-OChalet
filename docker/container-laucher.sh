@@ -33,13 +33,13 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen -P ''"
 
 #script de dump de la bdd
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch test.sh && chmod +x test.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'db dump in progress ...' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo ""db dump in progress ...""' >> test.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> test.sh"
 
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'sending dump for backup..' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo ""sending dump for backup..""' >> test.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'rsync --delete -avrhe `ssh -p $BACKUP_SERVER_SSH_PORT` /home/ $DB_DUMP_BACKUP_SERVER' >> test.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'dump sent on backup server !' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo ""dump sent on backup server !""' >> test.sh"
 
 
 #mise en place du cronjob pour effectuer les dump et les 
