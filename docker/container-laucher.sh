@@ -3,6 +3,9 @@ docker-compose -p ochalet_stack up --build -d
 sleep 1
 apt-get update
 apt-get install rsync -y
+docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch -y"
+docker cp /root/linode-test/api/migrations ochalet_debian:/usr/src/
+docker cp /root/linode-test/docker/sqitch-init.sh ochalet_debian:/usr/src/
 # docker exec -it ochalet_api sh "migrations/sqitch-init.sh" 
 docker cp ./db_dump.sh ochalet_postgres:/db_dump.sh
 

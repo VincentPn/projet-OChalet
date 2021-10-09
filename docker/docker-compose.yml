@@ -44,6 +44,8 @@ services:
         - ochalet
       image: debian:stable-slim
       command: "tail -f /dev/null"
+      volumes:
+        - ../db-dump:/home/
 
     # portainer:
     #   image: portainer/portainer-ce:latest
