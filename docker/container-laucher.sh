@@ -29,7 +29,7 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "pg_dump postgres://$DB_URI > /ho
 
 #mise en place du cronjob pour effectuer les dump et les 
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch db_dump_cron"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '*/1 * * * * /backup-moving.sh >> /backup-moving.log 2>&1' >> db_dump_cron"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '*/1 * * * * /bin/sh /backup-moving.sh >> /backup-moving.log 2>&1' >> db_dump_cron"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "crontab db_dump_cron && rm db_dump_cron" 
 
 

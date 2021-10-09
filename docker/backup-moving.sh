@@ -1,4 +1,3 @@
-BASEDIR="db-dump"
 
 echo "db dump in progress ..."
 docker exec -i ochalet_postgres sh "/db_dump.sh"
