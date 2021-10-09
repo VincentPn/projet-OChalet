@@ -1,7 +1,5 @@
-FROM node:16-slim
+FROM node:lts-alpine
 WORKDIR /usr/src/app
-RUN apt update
-RUN apt install sqitch -y
 COPY ./package*.json ./
 RUN npm install
 COPY ./ ./
