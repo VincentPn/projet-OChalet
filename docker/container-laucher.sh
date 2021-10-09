@@ -69,9 +69,9 @@ do
     then 
     echo "BINGOOO"
     else
-    echo "NOOOOOO"
+    echo "Make sure to add ssh key in your backup server and connection can be established"
     fi
 done
 
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo yes | ssh -p $BACKUP_SERVER_SSH_PORT $DB_DUMP_BACKUP_SERVER"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "ssh -p $BACKUP_SERVER_SSH_PORT -q $DB_DUMP_BACKUP_SERVER exit if [echo \$? = 0] then echo \"connection estasblished\" else echo \"connection NOT established\" fi"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "ssh -o StrictHostKeyChecking=no -p $BACKUP_SERVER_SSH_PORT $DB_DUMP_BACKUP_SERVER"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "ssh -o StrictHostKeyChecking=no -p $BACKUP_SERVER_SSH_PORT -q $DB_DUMP_BACKUP_SERVER exit; if [echo \$? = 0]; then echo \"connection estasblished\"; else echo \"connection NOT established\"; fi"
