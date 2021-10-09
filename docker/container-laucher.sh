@@ -34,7 +34,7 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen -P ''"
 #script de dump de la bdd
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch test.sh && chmod +x test.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'db dump in progress ...' >> test.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> test.sh"
 
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'sending dump for backup..' >> test.sh"
