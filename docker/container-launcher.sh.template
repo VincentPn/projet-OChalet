@@ -1,15 +1,15 @@
 #definition des variables
 green_text=`tput setaf 2`
 reset_color=`tput sgr0`
-DB_URI="ochalet:ochalet@ochalet_postgres:5432/ochalet"
-REPO_NAME="linode-test"
+DB_URI="user:password@domain:port/dbname"
+REPO_NAME="my-repo"
 DEBIAN_CONTAINER_NAME="ochalet_debian"
 POSTGRES_CONTAINER_NAME="ochalet_postgres"
-PATH_TO_REPO="/root/"
-PATH_TO_COMPOSE_FILE="/root/linode-test/docker/docker-compose.yml"
-DB_DUMP_BACKUP_SERVER="pi@rpiweb.hopto.org"
-PATH_TO_STORAGE_BACKUPS="/home/pi/test2"
-BACKUP_SERVER_SSH_PORT="5000"
+PATH_TO_REPO="/home/bob/my-repo"
+PATH_TO_COMPOSE_FILE="/home/bob/docker/docker-compose.yml"
+DB_DUMP_BACKUP_SERVER="username@domain"
+PATH_TO_STORAGE_BACKUPS="/home/john/backups"
+BACKUP_SERVER_SSH_PORT="22"
 
 # build et lance tous les containers
 docker-compose -f $PATH_TO_COMPOSE_FILE -p ochalet_stack up --build -d
@@ -38,14 +38,20 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"db dump in progress
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'DATE=\$(date +\"%F-%H:%M\")' >> backup-moving.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> backup-moving.sh"
 
+#envoi des dump vers le serveur de backup
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"sending dump for backup..\"' >> backup-moving.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'rsync --delete -avrhe \"ssh -p $BACKUP_SERVER_SSH_PORT\" /home/ $DB_DUMP_BACKUP_SERVER:$PATH_TO_STORAGE_BACKUPS' >> backup-moving.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"dump sent on backup server !\"' >> backup-moving.sh"
 
+#suppression des backup de plus de 3 jours
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"deleting files older than 3 days...\"' >> backup-moving.sh"
+docker exec -i $DEBIAN_CONTAINER_NAME bash -c "find /home/ -type f -ctime +3 -execdir rm -- '{}' \;"
+
+
 #mise en place du cronjob pour effectuer les dump et les 
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "service cron start"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch db_dump_cron"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '*/1 * * * * /bin/sh /backup-moving.sh >> /backup-moving.log 2>&1' >> db_dump_cron"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '0 4 * * * /bin/sh /backup-moving.sh >> /backup-moving.log 2>&1' >> db_dump_cron"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "crontab db_dump_cron && rm db_dump_cron" 
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "service cron restart" 
 
@@ -63,7 +69,7 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
 echo "${green_text}------------------------------------------------------------------------------------${reset_color}"
 
 while true; do
-    read -p "Press \"yes\" when ssh key added in authorized keys in your backup server\n" yn
+    read -p "Press \"yes\" when ssh key added in authorized keys in your backup server" yn
     case $yn in
         [Yy]* ) break;;
         [Nn]* ) exit;;
