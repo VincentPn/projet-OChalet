@@ -61,7 +61,7 @@ networks:
     name: ochalet
 
 volumes:
-    portainer-data:
+    portainer_data:
 
         
 
