@@ -48,14 +48,11 @@ services:
         - ../db-dump:/home/
 
       
-      
-
+    
 networks:
   ochalet:
     name: ochalet
 
-volumes:
-    portainer_data:
 
         
 
