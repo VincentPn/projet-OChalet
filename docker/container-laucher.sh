@@ -16,7 +16,7 @@ docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch
 
 #copie des fichiers necessaires pour sqitch
 docker cp /root/$REPO_NAME/api/migrations $DEBIAN_CONTAINER_NAME:/usr/src/
-docker cp /root/$REPO_NAME/data/seeding.sql $DEBIAN_CONTAINER_NAME:/usr/src/
+docker cp /root/$REPO_NAME/api/data/seeding.sql $DEBIAN_CONTAINER_NAME:/usr/src/
 
 #deploiement de la structure de la base de donnée via sqitch
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "sqitch init ochalet --target db:pg://$DB_URI --top-dir /usr/src/migrations"
