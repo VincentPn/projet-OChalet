@@ -28,7 +28,7 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "sqitch deploy"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/src/seeding.sql"
 
 #dump de la bdd avec la date actuelle dans le dossier /home du container
-docker exec -it $POSTGRES_CONTAINER_NAME bash -c "pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\_$(date +"%F-%H:%M").sql"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\_$(date +"%F-%H:%M").sql"
 
 #mise en place du cronjob pour effectuer les dump et les 
 # crontab -l > db_dump_cron

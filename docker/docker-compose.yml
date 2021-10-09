@@ -16,8 +16,6 @@ services:
         - POSTGRES_USER=ochalet
         - POSTGRES_PASSWORD=ochalet
         - POSTGRES_DB=ochalet
-      volumes:
-        - ../db-dump/:/home
 
     ochalet_api:
       container_name: ochalet_api
