@@ -27,8 +27,10 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/
 #dump de la bdd avec la date actuelle dans le dossier /home du container
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\_$(date +"%F-%H:%M").sql"
 
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "DATE='DATE=$(date +"%F-%H:%M")' && echo \$DATE >> test.sh"
+docker exec -it ochalet_debian bash -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME_\$DATE.sql' >> test.sh"
+
+
 
 #mise en place du cronjob pour effectuer les dump et les 
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "service cron start"
