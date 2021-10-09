@@ -27,7 +27,7 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "sqitch deploy"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/src/seeding.sql"
 
 #ssh key generating
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen -P ''"
 CONTAINER_SSH_KEY = docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
 
 
