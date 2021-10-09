@@ -16,6 +16,8 @@ services:
         - POSTGRES_USER=ochalet
         - POSTGRES_PASSWORD=ochalet
         - POSTGRES_DB=ochalet
+      volumes:
+        - db_data:/var/lib/postgresql/data
 
     ochalet_api:
       container_name: ochalet_api
@@ -54,6 +56,8 @@ networks:
 volumes:
   db_dump:
     name: ochalet_db_dump
+  db_data:
+    name: ochalet_db_data
 
 
         
