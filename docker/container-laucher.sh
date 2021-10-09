@@ -11,7 +11,7 @@ docker-compose -f $PATH_TO_COMPOSE_FILE -p ochalet_stack up --build -d
 sleep 1
 
 #installe sqitch dans le container debian sur le meme network que l'api
-docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch cron rsync -y"
+docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch cron rsync nano-tiny -y"
 
 #copie des fichiers necessaires pour sqitch
 docker cp $PATH_TO_REPO$REPO_NAME/api/migrations $DEBIAN_CONTAINER_NAME:/usr/src/
@@ -28,9 +28,9 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\_$(date +"%F-%H:%M").sql"
 
 #mise en place du cronjob pour effectuer les dump et les 
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch db_dump_cron"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '*/1 * * * * /bin/sh /backup-moving.sh >> /backup-moving.log 2>&1' >> db_dump_cron"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "crontab db_dump_cron && rm db_dump_cron" 
+# docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch db_dump_cron"
+# docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '*/1 * * * * /bin/sh /backup-moving.sh >> /backup-moving.log 2>&1' >> db_dump_cron"
+# docker exec -it $DEBIAN_CONTAINER_NAME bash -c "crontab db_dump_cron && rm db_dump_cron" 
 
 
 
