@@ -28,8 +28,6 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/
 
 #ssh key generating
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen -P ''"
-CONTAINER_SSH_KEY=docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
-
 
 #script de dump de la bdd
 docker exec -it ochalet_debian bash -c "echo 'DATE=\$(date +"%F-%H:%M")' >> test.sh"
@@ -54,4 +52,7 @@ iptables -A INPUT -p tcp --dport 9443 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 3000 -j ACCEPT
 iptables -A OUTPUT -p tcp --dport 9443 -j ACCEPT
 
-echo "COPY THIS CONTAINER SSH KEY\n${green_text}$CONTAINER_SSH_KEY${reset_color}"
+
+
+echo "${green_text}COPY THIS CONTAINER SSH KEY${reset_color}"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
