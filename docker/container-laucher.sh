@@ -42,17 +42,12 @@ docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"sending dump for ba
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'rsync --delete -avrhe \"ssh -p $BACKUP_SERVER_SSH_PORT\" /home/ $DB_DUMP_BACKUP_SERVER:$PATH_TO_STORAGE_BACKUPS' >> backup-moving.sh"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"dump sent on backup server !\"' >> backup-moving.sh"
 
-
-
 #mise en place du cronjob pour effectuer les dump et les 
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "service cron start"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch db_dump_cron"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '*/1 * * * * /bin/sh /backup-moving.sh >> /backup-moving.log 2>&1' >> db_dump_cron"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "crontab db_dump_cron && rm db_dump_cron" 
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "service cron restart" 
-
-
-
 
 # Autoriser les connexions entrantes pour ces ports
 iptables -A INPUT -p tcp --dport 3000 -j ACCEPT 
@@ -63,9 +58,10 @@ iptables -A OUTPUT -p tcp --dport 9443 -j ACCEPT
 
 
 #affiche la clé ssh et attend que l'utilisateur presse "entrer" pour verifier si la connexion ssh s'établie
-echo "${green_text}COPY THIS CONTAINER SSH KEY${reset_color}"
+echo "${green_text}COPY THIS CONTAINER SSH KEY TO YOUR BACKUP SERVER \"authorized_keys\" FILE${reset_color}"
 docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
-echo "${green_text}----------------------------------------------------------------------------------${reset_color}"
+echo "${green_text}------------------------------------------------------------------------------------${reset_color}"
 
-read -p "Press enter to confirm ssh key added in authorized keys in your backup server"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo y | ssh -p $BACKUP_SERVER_SSH_PORT $DB_DUMP_BACKUP_SERVER && send \"exit\" "
+read -p "Press enter when ssh key added in authorized keys in your backup server" </dev/tty
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo y | ssh -p $BACKUP_SERVER_SSH_PORT $DB_DUMP_BACKUP_SERVER"
+docker exec -it $DEBIAN_CONTAINER_NAME bash -c "ssh -p $BACKUP_SERVER_SSH_PORT -q $DB_DUMP_BACKUP_SERVER exit if(echo \$? = 0) then echo \"connection estasblished\" else echo \"connection NOT established\" fi"
