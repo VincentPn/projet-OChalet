@@ -5,6 +5,8 @@ services:
       networks:
         - ochalet
       image: redis:alpine
+      volumes:
+        - redis_data:/data
 
     ochalet_postgres:
       container_name: ochalet_postgres
@@ -58,6 +60,8 @@ volumes:
     name: ochalet_db_dump
   db_data:
     name: ochalet_db_data
+  redis_data:
+    name: ochalet_redis_data
 
 
         
