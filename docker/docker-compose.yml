@@ -55,6 +55,7 @@ networks:
 
 volumes:
   db_dump:
+    name: ochalet_db_dump
 
 
         
