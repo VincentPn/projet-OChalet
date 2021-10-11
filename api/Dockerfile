@@ -2,6 +2,7 @@ FROM node:lts-alpine as builder
 WORKDIR /home
 COPY ./package.json ./
 RUN npm install
+RUN install -g nodemon
 COPY ./ ./
 EXPOSE 3000
 ENTRYPOINT [ "npm" ]
