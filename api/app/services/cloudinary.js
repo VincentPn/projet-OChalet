@@ -13,24 +13,27 @@ module.exports = {
     try {
       
       console.log('nous sommes dans cloudinary')
+      console.log(request.body)
       
-      const {url} = await cloudinary.v2.uploader.upload(request.files.main_picture.path);
+      const {url} = await cloudinary.v2.uploader.upload(request.body.main_picture);
       if(!url) throw new Error('Cloudinary upload error')
       console.log(url)
       request.body.main_picture = url
      
       
-      const optionalPictures = Object.keys(request.files)
+      const optionalPictures = Object.keys(request.body)
                                      .map(key => key.includes("galery_picture") ? key : null)
                                      .filter(key => key)
-                                     .filter(key => Object.keys(key).length)
+                                     
+
       if(!optionalPictures) return next()
 
       console.log(optionalPictures)
   
       for(const picture of optionalPictures) {
         
-        const {url} = await cloudinary.v2.uploader.upload(request.files[picture].path);
+        
+        const {url} = await cloudinary.v2.uploader.upload(request.body[picture]);
         if(!url) throw new Error('Cloudinary upload error')
         console.log(url)
         request.body[picture] = url

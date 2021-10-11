@@ -5,7 +5,7 @@ BEGIN;
 -- OFFER FUNCTIONS
 
 CREATE FUNCTION new_offer(myRecord json) RETURNS int AS $$
-	INSERT INTO "offer" ("title", "body", "zip_code", "city_name", "country", "street_name", "street_number", "price_ht", "tax", "main_picture", "location_id")
+	INSERT INTO "offer" ("title", "body", "zip_code", "city_name", "country", "street_name", "street_number", "price_ht", "tax", "main_picture", "galery_picture_1", "galery_picture_2", "galery_picture_3", "galery_picture_4", "galery_picture_5", "location_id")
 	VALUES (
 		myRecord->>'title',
 		myRecord->>'body',
@@ -17,6 +17,11 @@ CREATE FUNCTION new_offer(myRecord json) RETURNS int AS $$
 		(myRecord->>'price_ht')::int,
 		(myRecord->>'tax')::int,
 		myRecord->>'main_picture',
+		myRecord->>'galery_picture_1',
+		myRecord->>'galery_picture_2',
+		myRecord->>'galery_picture_3',
+		myRecord->>'galery_picture_4',
+		myRecord->>'galery_picture_5',
         (myRecord->>'location_id')::int
 	) RETURNING id
 $$ LANGUAGE SQL STRICT;

@@ -1,4 +1,5 @@
 const formidable = require('formidable')
+const dataValidator = require('./dataValidator')
 
 module.exports = {
   uploadFile: (request, response, next) => {
@@ -7,7 +8,7 @@ module.exports = {
   
     form.parse(request, (error, fields, files) => {
       if(error) return console.log(error.message)
-      request.body = fields
+       
       let count = 0
       const fieldsName = Object.keys(files)
       for(const fieldName of fieldsName) {
@@ -19,12 +20,13 @@ module.exports = {
         
       }
 
-      if(count === fieldsName.length) request.files = files
-      else return response.status(500).send({error: "file extension must be jpg/jpeg/png"})
-
-     
-      next()
-     
+      if(count !== fieldsName.length) return response.status(500).send({error: "file extension must be jpg/jpeg/png"})
+      else {
+        for(const file in files) request.body[file] = files[file].path
+        for(const field in fields) request.body[field] = fields[field]
+        next()
+      }
+      
     })
   }
 }

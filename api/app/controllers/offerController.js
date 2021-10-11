@@ -60,10 +60,12 @@ const offerController = {
 
   create: async (request, response) => {
       try {
-        console.log(request.body)
+        
         const newOffer = await new Offer(request.body).create()
         if(!newOffer) throw new Error('database create offer error')
-        console.log(newOffer, '$$$$$$$$$$$$$$')
+
+        console.log(newOffer)
+  
         response.status(201).json({message: "offer created"});
 
       } catch (error) {
