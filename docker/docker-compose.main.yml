@@ -34,7 +34,7 @@ services:
       env_file:
         - .env_api
       volumes:
-        - ../api:/home:rw
+        - ../api/:/usr/src/app/:rw
       restart: unless-stopped
         
       
