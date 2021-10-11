@@ -25,7 +25,7 @@ services:
         - my-network
       build: ../api/
       image: api:v1.0.0
-      command: run dev
+      command: run start
       ports:
         - 3000:3000
       depends_on:
