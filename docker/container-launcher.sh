@@ -1,75 +1,55 @@
-#definition des variables
+#!/bin/bash
+
+# variables definition
 green_text=`tput setaf 2`
+red_text=`tput setaf 1`
 reset_color=`tput sgr0`
-DB_URI="ochalet:ochalet@ochalet_postgres:5432/ochalet"
-REPO_NAME="linode-test"
-DEBIAN_CONTAINER_NAME="ochalet_debian"
-POSTGRES_CONTAINER_NAME="ochalet_postgres"
-PATH_TO_REPO="/root/"
-PATH_TO_COMPOSE_FILE="/root/linode-test/docker/docker-compose.yml"
-DB_DUMP_BACKUP_SERVER="pi@rpiweb.hopto.org"
-PATH_TO_STORAGE_BACKUPS="/home/pi/test2"
+
+# REQUIERED VARIABLES
+DB_USERNAME="test"
+DB_PASSWORD="bingofjdifjidjfdi"
+DB_PORT="5432"
+DB_NAME="jfidjijdfidfj"
+
+PATH_TO_REPO="/home/jerome/projets-local/APO2/"
+REPO_NAME="projet-06-ochalet"
+
+PATH_TO_MAIN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.main.yml"
+PATH_TO_DEBIAN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.debian.yml"
+
+#OPTIONAL VARIABLES
+ENABLE_OPTIONAL_MODULES="true"
+
+## db dump and send to another server via ssh for backup
+ENABLE_BACKUP_SSH="true"
+BACKUP_SERVER_SSH="pi@rpiweb.hopto.org"
 BACKUP_SERVER_SSH_PORT="5000"
-
-# build et lance tous les containers
-docker-compose -f $PATH_TO_COMPOSE_FILE -p ochalet_stack up --build -d
-sleep 1
-
-#installe sqitch dans le container debian sur le meme network que l'api
-docker exec -it ochalet_debian bash -c "apt-get update && apt-get install sqitch cron rsync openssh-server -y"
-
-#copie des fichiers necessaires pour sqitch
-docker cp $PATH_TO_REPO$REPO_NAME/api/migrations $DEBIAN_CONTAINER_NAME:/usr/src/
-docker cp $PATH_TO_REPO$REPO_NAME/api/data/seeding.sql $DEBIAN_CONTAINER_NAME:/usr/src/
-
-#deploiement de la structure de la base de donnée via sqitch
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "sqitch init ochalet --target db:pg://$DB_URI --top-dir /usr/src/migrations"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "sqitch deploy"
-
-#seeding de la base de donné avec le fichier de seeding
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "psql postgres://$DB_URI -f /usr/src/seeding.sql"
-
-#generation des clés ssh
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo | ssh-keygen -P ''"
-
-#script de dump de la bdd
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch backup-moving.sh && chmod +x backup-moving.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"db dump in progress ...\"' >> backup-moving.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'DATE=\$(date +\"%F-%H:%M\")' >> backup-moving.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'pg_dump postgres://$DB_URI > /home/$POSTGRES_CONTAINER_NAME\$DATE.sql' >> backup-moving.sh"
-
-#envoi des dump vers le serveur de backup
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"sending dump for backup..\"' >> backup-moving.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'rsync --delete -avrhe \"ssh -p $BACKUP_SERVER_SSH_PORT\" /home/ $DB_DUMP_BACKUP_SERVER:$PATH_TO_STORAGE_BACKUPS' >> backup-moving.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"dump sent on backup server !\"' >> backup-moving.sh"
-
-#suppression des backup de plus de 3 jours
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"deleting files older than 3 days...\"' >> backup-moving.sh"
-docker exec -i $DEBIAN_CONTAINER_NAME bash -c "find /home/ -type f -ctime +3 -execdir rm -- '{}' \;"
+PATH_ON_BACKUP_SERVER="/home/pi/test2"
 
 
-#mise en place du cronjob pour effectuer les dump et les 
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "service cron start"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch db_dump_cron"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo '0 4 * * * /bin/sh /backup-moving.sh >> /backup-moving.log 2>&1' >> db_dump_cron"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "crontab db_dump_cron && rm db_dump_cron" 
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "service cron restart" 
+## setup cronjob for periodical dump
+ENABLE_DUMP_CRON="true"
+CRONJOB="*/1 * * * *"
+DELETE_OLDER_THAN_DAYS=5
 
-# Autoriser les connexions entrantes pour ces ports
-iptables -A INPUT -p tcp --dport 3000 -j ACCEPT 
-iptables -A INPUT -p tcp --dport 9443 -j ACCEPT 
-# Autoriser les connexions sortantes pour ces ports
-iptables -A OUTPUT -p tcp --dport 3000 -j ACCEPT
-iptables -A OUTPUT -p tcp --dport 9443 -j ACCEPT
+## use sqitch for db structure
+ENABLE_SQITCH="true"
+PATH_TO_SQITCH_FOLDER="$PATH_TO_REPO$REPO_NAME/api/migrations"
+# if you have seeding file
+PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/seeding.sql"
+
+## seeding database
+ENABLE_SEEDING="true"
+PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/seeding.sql"
 
 
-#affiche la clé ssh et attend que l'utilisateur presse "entrer" pour verifier si la connexion ssh s'établie
-echo "${green_text}COPY THIS CONTAINER SSH KEY TO YOUR BACKUP SERVER \"authorized_keys\" FILE${reset_color}"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "cat /root/.ssh/id_rsa.pub"
-echo "${green_text}------------------------------------------------------------------------------------${reset_color}"
 
+#NOT TOUCH THIS VARIABLE
+DB_URI="$DB_USERNAME:$DB_PASSWORD@postgres:$DB_PORT/$DB_NAME"
+
+#-------------------------------------------------------------------------------------------------------------------#
 while true; do
-    read -p "Press \"yes\" when ssh key added in authorized keys in your backup server" yn
+    read -p "Have you completed the conf file ? y/n " yn
     case $yn in
         [Yy]* ) break;;
         [Nn]* ) exit;;
@@ -77,11 +57,175 @@ while true; do
     esac
 done
 
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "touch ssh-check.sh && chmod +x ssh-check.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'ssh -o StrictHostKeyChecking=no -p $BACKUP_SERVER_SSH_PORT -q $DB_DUMP_BACKUP_SERVER exit' >> ssh-check.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'if [ \$? != \"0\" ]; then' >> ssh-check.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"Connection failed\"' >> ssh-check.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'else' >> ssh-check.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'echo \"Connection established\"' >> ssh-check.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME bash -c "echo 'fi' >> ssh-check.sh"
-docker exec -it $DEBIAN_CONTAINER_NAME sh "ssh-check.sh"
+touch .env_postgres
+echo " " >> .env_postgres
+sed -i "1c POSTGRES_USER=$DB_USERNAME" .env_postgres
+echo " " >> .env_postgres
+sed -i "2c POSTGRES_PASSWORD=$DB_PASSWORD" .env_postgres
+echo " " >> .env_postgres
+sed -i "3c POSTGRES_DB=$DB_NAME" .env_postgres
+
+
+touch .env_api
+echo " " >> .env_api
+sed -i "1c DATABASE_URL=postgres://$DB_URI" .env_api
+echo " " >> .env_api
+sed -i "2c REDIS_TLS_URL=redis://redis:6379" .env_api
+echo " " >> .env_api
+sed -i "3c NODE_ENV=docker" .env_api
+
+
+case $ENABLE_OPTIONAL_MODULES in
+
+  [tT]* | [yY]*) docker-compose -p $REPO_NAME -f $PATH_TO_DEBIAN_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
+
+  [fF]* | "" | [nN]*) docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
+esac
+
+# SETUP SQITCH TO DEPLOY DATABASE STRUCTURE
+case $ENABLE_SQITCH in
+
+  [tT]* | [yY]*)
+
+        case $ENABLE_OPTIONAL_MODULES in
+
+        [tT]* | [yY]*)
+        sed -i "1c REPO_NAME=\"$REPO_NAME\"" modules/sqitch.sh
+        sed -i "2c PATH_TO_DEBIAN_COMPOSE_FILE=\"$PATH_TO_DEBIAN_COMPOSE_FILE\"" modules/sqitch.sh
+        sed -i "3c PATH_TO_SQITCH_FOLDER=\"$PATH_TO_SQITCH_FOLDER\"" modules/sqitch.sh
+        sed -i "4c PATH_TO_SEEDING_FILE=\"$PATH_TO_SEEDING_FILE\"" modules/sqitch.sh
+        sed -i "5c DB_URI=\"$DB_URI\"" modules/sqitch.sh
+        sh modules/sqitch.sh
+        ;;
+
+        [fF]* | "" | [nN]*) break;;
+        esac 
+  ;;
+
+  [fF]* | [nN]* | "") break;;
+esac
+
+# SETUP SEEDING IN DATABASE
+case $ENABLE_SEEDING in
+[tT]* | [yY]*)
+
+    case $ENABLE_OPTIONAL_MODULES in
+    [tT]* | [yY]*)
+
+        case $ENABLE_SQITCH in
+        [tT]* | [yY]*)
+
+            sed -i "1c PATH_TO_SEEDING_FILE=\"$PATH_TO_SEEDING_FILE\"" modules/seeding.sh
+            sed -i "2c DB_URI=\"$DB_URI\"" modules/seeding.sh
+            sh modules/seeding.sh
+            ;;
+        
+        [fF]* | "" | [nN]*) 
+            sed -i "1c PATH_TO_SEEDING_FILE=\"$PATH_TO_SEEDING_FILE\"" modules/seeding.sh
+            sed -i "2c DB_URI=\"$DB_URI\"" modules/seeding.sh
+            sed -i '4c docker exec -it debian bash -c \"apt-get update && apt-get install postgresql-client -y \"' modules/seeding.sh
+            sh modules/seeding.sh
+            ;;
+        esac
+
+    ;;
+    [fF]* | "" | [nN]*) break;;
+    esac 
+;;
+[fF]* | [nN]* | "") break;;
+esac
+
+# SETUP CRONJOB FOR PERIODICALY DUMP OF DATABASE
+case $ENABLE_DUMP_CRON in
+
+  [tT]* | [yY]*)
+
+        case $ENABLE_OPTIONAL_MODULES in
+
+        [tT]* | [yY]*)
+        sed -i "1c CRONJOB=\"$CRONJOB\"" modules/cron.sh
+        sed -i "2c DB_URI=\"$DB_URI\"" modules/cron.sh
+        sed -i "3c DELETE_OLDER_THAN_DAYS=\"$DELETE_OLDER_THAN_DAYS\"" modules/cron.sh
+        docker cp modules/cron.sh debian:/
+        docker exec -it debian sh "/cron.sh"
+        ;;
+
+        [fF]* | "" | [nN]*) break;;
+        esac 
+  ;;
+
+  [fF]* | [nN]* | "") break;;
+esac
+
+# SEND DUMPED DATABASE BACKUP FILES OVER SSH
+case $ENABLE_BACKUP_SSH in
+
+  [tT]* | [yY]*)
+
+        case $ENABLE_OPTIONAL_MODULES in
+
+        [tT]* | [yY]*)
+        sed -i "1c BACKUP_SERVER_SSH=\"$BACKUP_SERVER_SSH\"" modules/ssh1.sh
+        sed -i "2c PATH_ON_BACKUP_SERVER=\"$PATH_ON_BACKUP_SERVER\"" modules/ssh1.sh
+        sed -i "3c BACKUP_SERVER_SSH_PORT=\"$BACKUP_SERVER_SSH_PORT\"" modules/ssh1.sh
+        docker cp modules/ssh1.sh debian:/
+        docker exec -it debian sh "/ssh1.sh"
+        echo "${green_text}COPY THIS KEY INTO YOUR authorized_keys FILE${reset_color}"
+        echo "${green_text}----------------------------------------------------------------------------${reset_color}"
+        docker exec -it debian bash -c "cat ~/.ssh/id_rsa.pub"
+        echo "${green_text}----------------------------------------------------------------------------${reset_color}"
+
+        while true; do
+            read -p "Type yes when key is copied or no to abort this script ? y/n " yn
+            case $yn in
+                [Yy]* ) break;;
+                [Nn]* ) docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE down -v  
+                exit;;
+            * ) echo "Please answer yes or no.";;
+            esac
+        done
+
+        sed -i "1c BACKUP_SERVER_SSH=\"$BACKUP_SERVER_SSH\"" modules/ssh2.sh
+        sed -i "2c PATH_ON_BACKUP_SERVER=\"$PATH_ON_BACKUP_SERVER\"" modules/ssh2.sh
+        sed -i "3c BACKUP_SERVER_SSH_PORT=\"$BACKUP_SERVER_SSH_PORT\"" modules/ssh2.sh
+        docker cp modules/ssh2.sh debian:/
+        docker exec -it debian sh "/ssh2.sh"
+        
+        ;;
+
+        [fF]* | "" | [nN]*) break;;
+        esac 
+  ;;
+
+  [fF]* | [nN]* | "") break;;
+esac
+
+
+sed -i '1c BACKUP_SERVER_SSH=' modules/ssh1.sh
+sed -i '2c PATH_ON_BACKUP_SERVER=' modules/ssh1.sh
+sed -i '3c BACKUP_SERVER_SSH_PORT=' modules/ssh1.sh
+
+sed -i '1c BACKUP_SERVER_SSH=' modules/ssh2.sh
+sed -i '2c PATH_ON_BACKUP_SERVER=' modules/ssh2.sh
+sed -i '3c BACKUP_SERVER_SSH_PORT=' modules/ssh2.sh
+
+sed -i '1c CRONJOB=' modules/cron.sh
+sed -i '2c DB_URI=' modules/cron.sh
+sed -i '3c DELETE_OLDER_THAN_DAYS=' modules/cron.sh
+
+sed -i '1c PATH_TO_SEEDING_FILE=' modules/seeding.sh
+sed -i '2c DB_URI=' modules/seeding.sh
+
+sed -i '1c REPO_NAME=' modules/sqitch.sh
+sed -i '2c PATH_TO_DEBIAN_COMPOSE_FILE=' modules/sqitch.sh
+sed -i '3c PATH_TO_SQITCH_FOLDER=' modules/sqitch.sh
+sed -i '4c PATH_TO_SEEDING_FILE=' modules/sqitch.sh
+sed -i '5c DB_URI=' modules/sqitch.sh
+
+
+rm .env_postgres && touch .env_postgres
+rm .env_api && touch .env_api
+
+
+
+

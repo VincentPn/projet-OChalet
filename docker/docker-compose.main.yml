@@ -1,0 +1,51 @@
+version: '3.7'
+services:
+    redis:
+      container_name: redis
+      networks:
+        - my-network
+      image: redis:alpine
+      volumes:
+        - redis_data:/data
+
+    postgres:
+      container_name: postgres
+      hostname: postgres
+      networks:
+        - my-network
+      image: postgres:13.4-alpine
+      env_file:
+        - .env_postgres
+      volumes:
+        - db_data:/var/lib/postgresql/data
+
+    api:
+      container_name: api
+      networks:
+        - my-network
+      build: ../api/
+      image: api:v1.0.0
+      command: run start
+      ports:
+        - 3000:3000
+      depends_on:
+        - redis
+        - postgres
+      env_file:
+        - .env_api
+        
+      
+    
+networks:
+  my-network:
+    name: my-network
+
+volumes:
+  db_data:
+    name: postgres_data
+  redis_data:
+    name: redis_data
+
+
+        
+
