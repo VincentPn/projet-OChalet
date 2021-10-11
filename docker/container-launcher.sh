@@ -11,8 +11,8 @@ DB_PASSWORD="bingofjdifjidjfdi"
 DB_PORT="5432"
 DB_NAME="jfidjijdfidfj"
 
-PATH_TO_REPO="/home/jerome/projets-local/APO2/"
-REPO_NAME="projet-06-ochalet"
+PATH_TO_REPO="/root/"
+REPO_NAME="linode-test"
 
 PATH_TO_MAIN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.main.yml"
 PATH_TO_DEBIAN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.debian.yml"
