@@ -57,6 +57,9 @@ while true; do
     esac
 done
 
+touch container-stopper.sh
+echo " " >> container-stopper.sh
+sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE down -v && docker image rm api:v1.0.0" container-stopper.sh
 touch .env_postgres
 echo " " >> .env_postgres
 sed -i "1c POSTGRES_USER=$DB_USERNAME" .env_postgres
@@ -227,5 +230,22 @@ rm .env_postgres && touch .env_postgres
 rm .env_api && touch .env_api
 
 
+
+#On flush
+iptables -F INPUT
+iptables -F OUTPUT
+
+#Politiques
+iptables -P OUTPUT ACCEPT
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+
+#Autoriser le loopback
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+#Connexion etablie
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 
