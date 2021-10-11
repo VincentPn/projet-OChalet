@@ -1,7 +1,6 @@
 FROM node:lts-alpine as builder
-WORKDIR /home
+WORKDIR /home/
 COPY ./package.json ./
-RUN npm install -g nodemon
 RUN npm install
 COPY ./ ./
 EXPOSE 3000
