@@ -21,15 +21,15 @@ PATH_TO_DEBIAN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.debia
 ENABLE_OPTIONAL_MODULES="true"
 
 ## db dump and send to another server via ssh for backup
-ENABLE_BACKUP_SSH="true"
+ENABLE_BACKUP_SSH="false"
 BACKUP_SERVER_SSH="pi@rpiweb.hopto.org"
 BACKUP_SERVER_SSH_PORT="5000"
 PATH_ON_BACKUP_SERVER="/home/pi/test2"
 
 
 ## setup cronjob for periodical dump
-ENABLE_DUMP_CRON="true"
-CRONJOB="*/1 * * * *"
+ENABLE_DUMP_CRON="false"
+CRONJOB="0 4 * * *"
 DELETE_OLDER_THAN_DAYS=5
 
 ## use sqitch for db structure
