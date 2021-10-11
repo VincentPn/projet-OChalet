@@ -12,6 +12,9 @@ sqitch.conf
 .env
 .env_postgres
 .env_api
+api-stopper.sh
+api-rebuilder.sh
+container-stopper.sh
 
 # testing
 coverage
