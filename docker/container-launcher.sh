@@ -60,6 +60,15 @@ done
 touch container-stopper.sh
 echo " " >> container-stopper.sh
 sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE down -v && docker image rm api:v1.0.0" container-stopper.sh
+
+touch api-stopper.sh
+echo " " >> api-stopper.sh
+sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE up -d" container-rebuilder.sh
+
+touch api-rebuilder.sh
+echo " " >> api-rebuilder.sh
+sed -i "1c docker-compose -p $REPO_NAME -f $" api-rebuilder.sh
+
 touch .env_postgres
 echo " " >> .env_postgres
 sed -i "1c POSTGRES_USER=$DB_USERNAME" .env_postgres
