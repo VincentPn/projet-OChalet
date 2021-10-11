@@ -6,10 +6,10 @@ red_text=`tput setaf 1`
 reset_color=`tput sgr0`
 
 # REQUIERED VARIABLES
-DB_USERNAME="test"
-DB_PASSWORD="bingofjdifjidjfdi"
+DB_USERNAME="ochalet"
+DB_PASSWORD="ochalet"
 DB_PORT="5432"
-DB_NAME="jfidjijdfidfj"
+DB_NAME="ochalet"
 
 PATH_TO_REPO="/root/"
 REPO_NAME="linode-test"
