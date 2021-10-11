@@ -53,7 +53,7 @@ const bookingController = {
           
        
           const emailBody = bookingMailTemplate(user, newBooking, offer)
-          await sendMail("ochaleto@gmail.com", "Booking", emailBody)
+          await sendMail("ochalet@gmail.com", "Booking", emailBody)
           
   
           response.status(201).json(newBooking);
