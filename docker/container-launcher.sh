@@ -35,8 +35,7 @@ DELETE_OLDER_THAN_DAYS=5
 ## use sqitch for db structure
 ENABLE_SQITCH="true"
 PATH_TO_SQITCH_FOLDER="$PATH_TO_REPO$REPO_NAME/api/migrations"
-# if you have seeding file
-PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/seeding.sql"
+
 
 ## seeding database
 ENABLE_SEEDING="true"

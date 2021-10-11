@@ -52,8 +52,8 @@ const bookingController = {
           const offer = await Offer.findById(offer_id)
           
        
-          // const emailBody = bookingMailTemplate(user, newBooking, offer)
-          // await sendMail("ochaleto@gmail.com", "Booking", emailBody)
+          const emailBody = bookingMailTemplate(user, newBooking, offer)
+          await sendMail("ochaleto@gmail.com", "Booking", emailBody)
           
   
           response.status(201).json(newBooking);
