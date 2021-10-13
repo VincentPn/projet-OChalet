@@ -23,7 +23,7 @@ module.exports = async (request, response, next) => {
           }
           else return next();
           
-          if (keys.includes(key)) {
+          if (keys.includes(key) && await asyncClient.exists(key)) {
               const value =  JSON.parse(await asyncClient.get(key));
               console.log('cached response');
               response.json(value);
