@@ -48,7 +48,7 @@ const userController = {
 
             await user.update();
          
-            response.status(204).json('Update done');
+            response.status.json(user);
 
         } catch (error) {
             response.status(500).send(error.message);
