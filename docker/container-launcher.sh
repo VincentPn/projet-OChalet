@@ -44,6 +44,23 @@ PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/seeding.sql"
 DB_URI="$DB_USERNAME:$DB_PASSWORD@postgres:$DB_PORT/$DB_NAME"
 
 #-------------------------------------------------------------------------------------------------------------------#
+#SETUP shorcuts for managing containers without relauching this looooooong script
+
+touch container-stopper.sh
+echo " " >> container-stopper.sh
+sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE down -v && docker image rm api:v1.0.0" container-stopper.sh
+
+touch api-stopper.sh
+echo " " >> api-stopper.sh
+sed -i "1c docker stop api && docker rm api && docker image rm api:v1.0.0" api-stopper.sh
+
+touch api-rebuilder.sh
+echo " " >> api-rebuilder.sh
+sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE up -d" api-rebuilder.sh
+
+
+
+
 #Config file confirmation before run
 while true; do
     read -p "Have you completed the conf file ? y/n " yn
@@ -230,41 +247,41 @@ sed -i '5c DB_URI=' modules/sqitch.sh
 
 #--------------------------------------------------------------------------------------------------#
 
-Setup iptables rules for cloud vm to accept only authorized port incoming and outgoing
+#Setup iptables rules for cloud vm to accept only authorized port incoming and outgoing
 
-#Flush
-iptables -F INPUT
-iptables -F OUTPUT
+# #Flush
+# iptables -F INPUT
+# iptables -F OUTPUT
 
-#Policies
-iptables -P OUTPUT DROP
-iptables -P INPUT DROP
+# #Policies
+# iptables -P OUTPUT DROP
+# iptables -P INPUT DROP
 
-#Authorize DNS port
-iptables -A INPUT -p tcp --dport 53 -j ACCEPT
-iptables -A INPUT -p udp --dport 53 -j ACCEPT
+# #Authorize DNS port
+# iptables -A INPUT -p tcp --dport 53 -j ACCEPT
+# iptables -A INPUT -p udp --dport 53 -j ACCEPT
 
-#Authorize loopback
-iptables -A INPUT -i lo -j ACCEPT
-iptables -A OUTPUT -o lo -j ACCEPT
+# #Authorize loopback
+# iptables -A INPUT -i lo -j ACCEPT
+# iptables -A OUTPUT -o lo -j ACCEPT
 
-#Authorize established connections
-iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+# #Authorize established connections
+# iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+# iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
-#Authorize connections (outgoing and incoming) for this ip => must be fix ip or domain name.
-iptables -A INPUT -s rpiweb.hopto.org -j ACCEPT
-iptables -A OUTPUT -s rpiweb.hopto.org -j ACCEPT
-iptables -A FORWARD -s rpiweb.hopto.org -j ACCEPT
+# #Authorize connections (outgoing and incoming) for this ip => must be fix ip or domain name.
+# iptables -A INPUT -s rpiweb.hopto.org -j ACCEPT
+# iptables -A OUTPUT -s rpiweb.hopto.org -j ACCEPT
+# iptables -A FORWARD -s rpiweb.hopto.org -j ACCEPT
 
-#Incoming authorized ports
-iptables -A INPUT -p udp --dport 2525 -j ACCEPT #mailtrap
-iptables -A INPUT -p tcp --dport 2525 -j ACCEPT #mailtrap
-iptables -A INPUT -p tcp --dport 3000 -j ACCEPT #API
+# #Incoming authorized ports
+# iptables -A INPUT -p udp --dport 2525 -j ACCEPT #mailtrap
+# iptables -A INPUT -p tcp --dport 2525 -j ACCEPT #mailtrap
+# iptables -A INPUT -p tcp --dport 3000 -j ACCEPT #API
 
-#Outgoing authorized ports
-iptables -A OUTPUT -p udp --dport 2525 -j ACCEPT #mailtrap
-iptables -A OUTPUT -p tcp --dport 2525 -j ACCEPT #mailtrap
-iptables -A OUTPUT -p tcp --dport 3000 -j ACCEPT #API
+# #Outgoing authorized ports
+# iptables -A OUTPUT -p udp --dport 2525 -j ACCEPT #mailtrap
+# iptables -A OUTPUT -p tcp --dport 2525 -j ACCEPT #mailtrap
+# iptables -A OUTPUT -p tcp --dport 3000 -j ACCEPT #API
  
 
