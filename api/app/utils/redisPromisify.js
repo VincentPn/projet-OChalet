@@ -8,4 +8,4 @@ module.exports = {
     setex: promisify(db.setex).bind(db),
     del: promisify(db.del).bind(db),
     exists: promisify(db.exists).bind(db)
-}
+};

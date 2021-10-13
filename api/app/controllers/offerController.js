@@ -4,14 +4,15 @@ const offerController = {
 
     findAllorFilter: async (request, response) => {
         try {
-            const {id, title, location_id} = request.query
+            const {id, title, location_id} = request.query;
             if(title){
 
               const offers = await Offer.findByTitle(title);
               for(const offer of offers) {
-                for(const field in offer) !offer[field] ? delete offer[field] : null
-                offer.bookings = await Booking.findByOffer(parseInt(offer.id, 10));
-                
+                for(const field in offer) {
+                  if(!offer[field] && field !== "offer_status") delete offer[field];
+                }
+                offer.bookings = await Booking.findByOffer(offer.id);
               }
               response.json(offers);
               
@@ -19,23 +20,28 @@ const offerController = {
 
               const offers = await Offer.findByLocation(location_id);
               for(const offer of offers) {
-                for(const field in offer) !offer[field] ? delete offer[field] : null
-                offer.bookings = await Booking.findByOffer(parseInt(offer.id, 10))
+                for(const field in offer) {
+                  if(!offer[field] && field !== "offer_status") delete offer[field];
+                }
+                offer.bookings = await Booking.findByOffer(offer.id);
               }
               response.json(offers);
 
             }else if(id) {
               const offer = await Offer.findById(id);
-              for(const field in offer) !offer[field] ? delete offer[field] : null
-              offer.bookings = await Booking.findByOffer(parseInt(offer.id, 10))
-           
+              for(const field in offer) {
+                if(!offer[field] && field !== "offer_status") delete offer[field];
+              }
+              offer.bookings = await Booking.findByOffer(offer.id);
               response.json(offer);
             }
             else {
               const offers = await Offer.findAll();
               for(const offer of offers) {
-                for(const field in offer) !offer[field] ? delete offer[field] : null
-                offer.bookings = await Booking.findByOffer(parseInt(offer.id, 10))
+                for(const field in offer) {
+                  if(!offer[field] && field !== "offer_status") delete offer[field];
+                }
+                offer.bookings = await Booking.findByOffer(offer.id);
               }
               response.json(offers);
             }
@@ -45,55 +51,44 @@ const offerController = {
         }
     },
 
-    findById: async (request, response) => {
-      try {
-          const offer = await Offer.findById(parseInt(request.params.id, 10));
-          const bookings = await Booking.findByOffer(parseInt(request.params.id, 10))
-          
-
-          response.json({offer, bookings});
-      } catch(error) {
-          response.status(500).send(error.message);
-      }
-    },
-
-
-  create: async (request, response) => {
+    create: async (request, response) => {
       try {
         
-        const newOffer = await new Offer(request.body).create()
-        if(!newOffer) throw new Error('database create offer error')
-
-        console.log(newOffer)
-  
+        const newOffer = await new Offer(request.body).create();
+        if(!newOffer.id) throw new Error('database create offer error');
         response.status(201).json({message: "offer created"});
 
       } catch (error) {
           response.status(500).send(error.message);
       }
-  },
+    },
 
-  update: async (request, response) => {
-    try {
+    update: async (request, response) => {
+      try {
+        const offer = await Offer.findById(request.body.id);
 
-        await new Offer(request.body).update()
+        for(const field in request.body){
+          offer[field] = request.body[field];
+        };
+        await offer.update();
          
-        // await Offer.update(request.body.id)
         response.status(204).json('Update done');
 
-    } catch (error) {
+      } catch (error) {
         response.status(500).send(error.message);
-    }
-  },
+      }
+    },
 
   
 
   delete: async (request, response) => {
       try {
-          const offerID = parseInt(request.query.id, 10);
+          const offerID = request.query.id;
           const confirmation = await Offer.delete(offerID);
-          if(!confirmation) return response.status(404).json({message: `no offer found with id ${offerID}`})
+          
+          if(!confirmation) return response.status(404).send({message: `no offer found with id ${offerID}`});
           response.status(200).json(`Offer with id ${offerID} deleted`);
+          
       } catch(error) {
           response.status(500).send(error.message);
       }

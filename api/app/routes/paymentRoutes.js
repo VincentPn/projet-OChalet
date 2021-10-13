@@ -1,15 +1,9 @@
-const paymentRouter = require('express').Router()
-const paymentController = require("../controllers/paymentController")
-
+const paymentRouter = require('express').Router();
+const paymentController = require("../controllers/paymentController");
 
 paymentRouter.route("/payment_intent")
 .post(paymentController.createPaymentIntent)
 .patch(paymentController.updatePaymentIntent)
-.delete(paymentController.deletePaymentIntent)
+.delete(paymentController.deletePaymentIntent);
 
-paymentRouter.route("/intents_list")
-// .get(paymentController.getIntentsList)
-.delete(paymentController.deleteAbandonedPaymentIntent)
-
-
-module.exports = paymentRouter
+module.exports = paymentRouter;

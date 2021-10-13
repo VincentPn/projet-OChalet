@@ -1,159 +1,58 @@
 
-const stripe = require('stripe')('sk_test_VePHdqKTYQjKNInc7u56JBrQ');
-const express = require('express');
-const exports = require('webpack');
-const app = express();
-app.use(express.static('public'));
+const stripe = require("stripe")(process.env.STRIPE_TEST_PRIVATE_KEY)
 
-const YOUR_DOMAIN = 'http://localhost:4242';
-// creation  session checkout 
-app.post('/create-checkout-session', async (req, res) => {
-  const session = await stripe.checkout.sessions.create({
-    line_items: [
-      {
-        // TODO: replace this with the `price` of the product you want to sell
-        price: '{{PRICE_ID}}',
-        quantity: 1,
-      },
-    ],
-    payment_method_types: [
-      'card',
-    ],
-    mode: 'payment',
-    // url de redirection
-    success_url: `${YOUR_DOMAIN}/success.html`,
-    cancel_url: `${YOUR_DOMAIN}/cancel.html`,
-  });
-    // redirection vers checkout
-  res.redirect(303, session.url)
-});
-
-app.listen(4242, () => console.log('Running on port 4242'));
-
-//version 2
-const express = require('express');
-const app = express();
-const { resolve } = require('path');
-// Copy the .env.example in the root into a .env file in this folder
-require('dotenv').config({ path: './.env' });
-
-// Ensure environment variables are set.
-checkEnv();
-
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2020-08-27',
-  appInfo: { // For sample support and debugging, not required for production:
-    name: "stripe-samples/accept-a-payment/prebuilt-checkout-page",
-    version: "0.0.1",
-    url: "https://github.com/stripe-samples"
-  }
-});
-
-app.use(express.static(process.env.STATIC_DIR));
-app.use(express.urlencoded());
-app.use(
-  express.json({
-    // We need the raw body to verify webhook signatures.
-    // Let's compute it only when hitting the Stripe webhook endpoint.
-    verify: function (req, res, buf) {
-      if (req.originalUrl.startsWith('/webhook')) {
-        req.rawBody = buf.toString();
-      }
-    },
-  })
-);
-
-app.get('/', (req, res) => {
-  const path = resolve(process.env.STATIC_DIR + '/index.html');
-  res.sendFile(path);
-});
-
-// Fetch the Checkout Session to display the JSON result on the success page
-app.get('/checkout-session', async (req, res) => {
-  const { sessionId } = req.query;
-  const session = await stripe.checkout.sessions.retrieve(sessionId);
-  res.send(session);
-});
-
-app.post('/create-checkout-session', async (req, res) => {
-  const domainURL = process.env.DOMAIN;
-
-  // The list of supported payment method types. We fetch this from the
-  // environment variables in this sample. In practice, users often hard code a
-  // list of strings for the payment method types they plan to support.
-  const pmTypes = (process.env.PAYMENT_METHOD_TYPES || 'card').split(',').map((m) => m.trim());
-
-  // Create new Checkout Session for the order
-  // Other optional params include:
-  // For full details see https://stripe.com/docs/api/checkout/sessions/create
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: pmTypes,
-    mode: 'payment',
-    line_items: [{
-      price: process.env.PRICE,
-      quantity: 1,
-    }],
-    // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
-    success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${domainURL}/canceled.html`,
-    // automatic_tax: { enabled: true }
-  });
-
-  return res.redirect(303, session.url);
-});
-
-// Webhook handler for asynchronous events.
-app.post('/webhook', async (req, res) => {
-  let event;
-
-  // Check if webhook signing is configured.
-  if (process.env.STRIPE_WEBHOOK_SECRET) {
-    // Retrieve the event by verifying the signature using the raw body and secret.
-    let signature = req.headers['stripe-signature'];
-
+module.exports = {
+  createPaymentIntent: async (obj) => {
+    
     try {
-      event = stripe.webhooks.constructEvent(
-        req.rawBody,
-        signature,
-        process.env.STRIPE_WEBHOOK_SECRET
-      );
-    } catch (err) {
-      console.log(`⚠️  Webhook signature verification failed.`);
-      return res.sendStatus(400);
+      return await stripe.paymentIntents.create({
+        amount: obj.price_ht * obj.tax * 100,
+        currency: 'eur',
+        description: obj.title,
+        statement_descriptor: `Ochalet-${obj.title}`.substr(0,22),
+        metadata: {
+          offer_id: obj.id,
+          booking_start: obj.booking_start,
+          booking_end: obj.booking_end,
+          email: obj.customer_email
+        },
+        payment_method_types: ['card'],
+        receipt_email: obj.customer_email
+      });
+    } catch (error) {
+      throw error
     }
-  } else {
-    // Webhook signing is recommended, but if the secret is not configured in `.env`,
-    // retrieve the event data directly from the request body.
-    event = req.body;
+  },
+
+  deletePaymentIntent: async (id) => {
+    try {
+      const {status} = await stripe.paymentIntents.cancel(id, {cancellation_reason: "requested_by_customer"});
+      if(!status || status !== "canceled") throw new Error(`Stripe ERROR: payment intent with id ${id} status is not cancelled`)
+      else return status
+    } catch (error) {
+      throw error
+    }
+  },
+
+  deleteAbandonedPaymentIntent: async () => {
+    try {
+      const {data} = await stripe.paymentIntents.list({created: {lt: Date.now() - 1000 * 60 * 60 * 24}});
+      
+      const cancelableList = data
+      .filter(intent => intent.status === "requires_payment_method")
+      .map(cancelableIntent => cancelableIntent.id);
+      if(!cancelableList.lenght) return console.log("no payment intent pending");
+
+
+      for(const cancelableIntent of cancelableList) {
+        await stripe.paymentIntents.cancel(cancelableIntent, {cancellation_reason: "abandoned"});
+      };
+      console.log("pending payment intent older than 24 deleted");
+
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
-  if (event.type === 'checkout.session.completed') {
-    console.log(`🔔  Payment received!`);
-
-    // Note: If you need access to the line items, for instance to
-    // automate fullfillment based on the the ID of the Price, you'll
-    // need to refetch the Checkout Session here, and expand the line items:
-    //
-    // const session = await stripe.checkout.sessions.retrieve(
-    //   'cs_test_KdjLtDPfAjT1gq374DMZ3rHmZ9OoSlGRhyz8yTypH76KpN4JXkQpD2G0',
-    //   {
-    //     expand: ['line_items'],
-    //   }
-    // );
-    //
-    // const lineItems = session.line_items;
-  }
-
-  res.sendStatus(200);
-});
-
-app.listen(4242, () => console.log(`Node server listening on port ${4242}!`));
-
-
-function checkEnv() {
-  const price = process.env.PRICE;
-  if(price === "price_12345" || !price) {
-    console.log("You must set a Price ID in the environment variables. Please see the README.");
-    process.exit(0);
-  }
 }
+

@@ -15,7 +15,7 @@ class Booking extends CoreModel {
       try {
 
         const {rows} = await db.query('SELECT "reservation_start", "reservation_end" FROM "booking" WHERE "offer_id" = $1', [offer_id]);
-        return rows
+        return rows;
 
       } catch(error) {
         if(error.detail) throw new Error(error.detail);

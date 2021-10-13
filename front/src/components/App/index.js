@@ -44,6 +44,7 @@ const App = () => {
   const loading = useSelector((state) => state.offers.loading);
 
   const logged = useSelector((state) => state.user.logged);
+  // const role = useSelector((state) => state.user.role);
 
   if (accessToken) {
     dispatch(connectUser(accessToken));
@@ -72,38 +73,48 @@ const App = () => {
 
   return (
     <div className="app">
-      <Header logged={logged} />
+      {/* <Header logged={logged} role={role} /> */}
       <Switch>
         <Route path="/" exact>
+          <Header logged={logged} />
           <Main />
         </Route>
         <Route path="/locations" exact>
+          <Header logged={logged} />
           <Locations />
         </Route>
         <Route path="/offers/location/:id" exact>
+          <Header logged={logged} />
           <Offers />
         </Route>
         <Route path="/offers/:id" exact>
+          <Header logged={logged} />
           <Offer />
         </Route>
         <Route path="/offers/:id/booking" exact>
+          <Header logged={logged} />
           <Bookingform />
         </Route>
         <Route path="/booking-payment" exact>
           <Elements stripe={promise}>
+            <Header logged={logged} />
             <Paymentform />
           </Elements>
         </Route>
         <Route path="/account/new-offer" exact>
+          <Header logged={logged} />
           <Createoffer />
         </Route>
         <Route path="/signup" exact>
+          <Header logged={logged} />
           <Signup />
         </Route>
         <Route path="/signin" exact>
+          <Header logged={logged} />
           <Signin />
         </Route>
         <Route path="/profile" exact>
+          <Header logged={logged} />
           {logged ? (
             <Profile />
           ) : (
@@ -111,10 +122,20 @@ const App = () => {
           )}
         </Route>
         <Route path="/account/admin" exact>
-          <Admin />
+          <Header logged={logged} />
+          {logged ? (
+            <Admin />
+          ) : (
+            <Signin />
+          )}
         </Route>
         <Route path="/account/user" exact>
+          <Header logged={logged} />
+          {logged ? (
           <User />
+          ) : (
+            <Signin />
+          )}
         </Route>
         <Route path="/cgv" exact>
           <Cgv />
@@ -135,7 +156,7 @@ const App = () => {
           <Error />
         </Route>
       </Switch>
-      <Footer />
+    <Footer />
     </div>
   );
 };

@@ -15,7 +15,7 @@ class User extends CoreModel {
         try {
           
           const {rows} = await db.query('SELECT * FROM "user" WHERE "email" = $1', [email]);
-          return rows[0]
+          return rows[0];
           
 
         } catch(error) {

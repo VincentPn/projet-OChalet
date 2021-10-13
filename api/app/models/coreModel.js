@@ -18,8 +18,8 @@ class CoreModel {
     static async findById(id) {
       try {
         const {rows} = await db.query(`SELECT * FROM "${this.tableName}" WHERE id = $1`, [id]);
-        if(!rows[0]) return
-        return new this(rows[0])
+        if(!rows[0]) return;
+        return new this(rows[0]);
       } catch(error) {
         if(error.detail) throw new Error(error.detail);
         throw error;
@@ -30,10 +30,11 @@ class CoreModel {
       try {
         const {rows} = await db.query(`SELECT * FROM "${this.tableName}" WHERE "user_id" = $1`, [id]);
         const instances = [];
-                for(const instance of rows) {
-                    instances.push(new this(instance));
-                }
-            return instances
+        for(const instance of rows) {
+            instances.push(new this(instance));
+        }
+        return instances;
+        
       } catch(error) {
         if(error.detail) throw new Error(error.detail);
         throw error;
@@ -50,7 +51,7 @@ class CoreModel {
 
       } catch (error) {
 
-        if(error.detail) throw new Error(error.detail)
+        if(error.detail) throw new Error(error.detail);
         else throw error;
 
       }
@@ -60,18 +61,17 @@ class CoreModel {
       try {
           await db.query(`SELECT update_${this.constructor.tableName}($1)`, [this]);
       } catch (error) {
-        console.log(error)
-
-        if(error.detail) throw new Error(error.detail)
+        if(error.detail) throw new Error(error.detail);
         else throw error;
       }
     }
 
     static async delete(id) {
       try {
-        await db.query(`DELETE FROM "${this.tableName}" WHERE id = $1`, [id]);
+        const {rowCount} = await db.query(`DELETE FROM "${this.tableName}" WHERE id = $1`, [id]);
+        return rowCount;
       } catch(error) {
-        if(error.detail) throw new Error(error.detail)
+        if(error.detail) throw new Error(error.detail);
         else throw error;
       }
     }
@@ -79,7 +79,7 @@ class CoreModel {
     static async setUserUnknown(id) {
       try {
         
-        await db.query(`UPDATE "${this.tableName}" SET "user_id" = 29 WHERE "user_id" = $1`, [id])
+        await db.query(`UPDATE "${this.tableName}" SET "user_id" = 666 WHERE "user_id" = $1`, [id]);
 
       } catch (error) {
         if(error.detail) throw new Error(error.detail);

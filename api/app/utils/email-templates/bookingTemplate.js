@@ -104,7 +104,7 @@ module.exports = (user, booking, offer) => {
         <tbody>
           <tr>
             <td>${booking.id}</td>
-            <td>${booking.reservation_start}</td>
+            <td>${booking.reservation_start} au ${booking.reservation_end}</td>
             <td>${offer.title}</td>
             <td>${offer.price_ht * offer.tax}€</td>
           </tr>
@@ -121,4 +121,4 @@ module.exports = (user, booking, offer) => {
     
   </body>
   </html>`
-}
+};

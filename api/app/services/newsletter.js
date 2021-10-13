@@ -1,31 +1,27 @@
-const db = require('../databases/postgres')
-const sendEmail = require('./nodemail')
-const newsLetterTemplate = require('../utils/email-templates/newsletterTemplate')
-const cron = require('node-cron');
+const db = require('../databases/postgres');
+const sendEmail = require('./nodemailer');
+const newsLetterTemplate = require('../utils/email-templates/newsletterTemplate');
 
 
-const sendNewsLetter = async () => {
+module.exports = async (request, response) => {
   try {
 
-    const {rows} = await db.query('SELECT "email", "lastname", "firstname" FROM "user"')
-    // rows.forEach(async user => {
-    //   const emailBody = newsLetterTemplate(user)
-    //   await sendEmail(user.email, "newsletter", emailBody)
-    // })
-
-    const emailBody = newsLetterTemplate(rows[0])
-    await sendEmail("ochaleto@gmail.com", "newsletter", emailBody)
-  
+    const {rows} = await db.query('SELECT "email", "lastname", "firstname" FROM "user"');
+    if(!rows.length) return response.status(404).send({error: "no user found in database"});
+    const users = rows.map(user => {
+      return {name: `${user.firstname} ${user.lastname}`, email: user.email};
+    });
+    for (const user of users) {
+      const emailBody = newsLetterTemplate(user);
+      await sendEmail(user.email, "Super promo O'chalet", emailBody);
+    };
+    response.json({message: "newsletter sent"});
 
   } catch (error) {
-    console.log(error.message)
+    response.status(500).send({ error: error.message })
   }
+};
 
 
-}
-
-sendNewsLetter()
-
-// cron.schedule('0,15,30,45 * * * * *', sendNewsLetter)
 
 

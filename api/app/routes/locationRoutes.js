@@ -1,13 +1,9 @@
-const locationRouter = require('express').Router()
-const locationController = require("../controllers/locationController")
+const locationRouter = require('express').Router();
+const locationController = require("../controllers/locationController");
 
 
 locationRouter.route("/locations")
-.get(locationController.findAll)
+.get(locationController.findAll);
 
 
-
-
-
-
-module.exports = locationRouter
+module.exports = locationRouter;

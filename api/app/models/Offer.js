@@ -14,11 +14,11 @@ class Offer extends CoreModel {
     static async findByTitle(title) {
       try {
 
-        title = title.split(" ").map(word => `(${word}?[ ]?)`).join("")
+        title = title.split(" ").map(word => `(${word}?[ ]?)`).join("");
         
         
         const {rows} = await db.query('SELECT * FROM "offer" WHERE "title" ~* $1', [title]);
-        return rows
+        return rows;
 
       } catch(error) {
         if(error.detail) throw new Error(error.detail);
@@ -30,7 +30,7 @@ class Offer extends CoreModel {
       try {
 
         const {rows} = await db.query('SELECT * FROM "offer" WHERE "location_id" = $1', [location_id]);
-        return rows
+        return rows;
 
       } catch(error) {
         if(error.detail) throw new Error(error.detail);

@@ -19,7 +19,9 @@ import { DateRange } from 'react-date-range';
 import frLocale from 'date-fns/locale/fr';
 import addMonths from 'date-fns/addMonths';
 
-import Carousel from 'nuka-carousel';
+// import Carousel from 'nuka-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from 'react-responsive-carousel';
 
 import './offer.scss';
 
@@ -45,13 +47,13 @@ const Offer = ({ match }) => {
 
   const logged = useSelector((state) => state.user.logged);
 
+  // eslint-disable-next-line
   useEffect(() => dispatch(fetchOffer(parseInt(id, 10))), []);
 
   const offerSelected = useSelector((state) => state.offers.offerSelected);
 
   const loading = useSelector((state) => state.offers.loading);
 
-  console.log(offerSelected, loading);
 
   const isModalOpen = useSelector((state) => state.offers.open);
 
@@ -85,10 +87,9 @@ const Offer = ({ match }) => {
   };
 
   const removeOffer = () => {
-    dispatch(removeOfferFromState(id));
+    // dispatch(removeOfferFromState(id));
     dispatch(deleteOffer(id));
     dispatch(closeModal());
-    redirect('/account/admin');
   };
 
   if (loading) {
@@ -102,42 +103,62 @@ const Offer = ({ match }) => {
           <section className="offer">
             <div className="offer__header">
               <h2 className="offer__header__title">
-                {offerSelected.offer.title}
+                {offerSelected.title}
               </h2>
               <h3 className="offer__header__city">
-                {offerSelected.offer.city_name}
+                {offerSelected.city_name}
               </h3>
               <div className="offer__header__pictures">
-                <Carousel>
-                  <img src={offerSelected.offer.main_picture} alt="main" />
+                {/* <Carousel>
+                  <img src={offerSelected.main_picture} alt="main" />
                   <img
-                    src={offerSelected.offer.galery_picture_1}
+                    src={offerSelected.galery_picture_1}
                     alt="galery"
                   />
                   <img
-                    src={offerSelected.offer.galery_picture_2}
+                    src={offerSelected.galery_picture_2}
                     alt="galery"
                   />
                   <img
-                    src={offerSelected.offer.galery_picture_3}
+                    src={offerSelected.galery_picture_3}
                     alt="galery"
                   />
                   <img
-                    src={offerSelected.offer.galery_picture_4}
+                    src={offerSelected.galery_picture_4}
                     alt="galery"
                   />
                   <img
-                    src={offerSelected.offer.galery_picture_5}
+                    src={offerSelected.galery_picture_5}
                     alt="galery"
                   />
-                </Carousel>
+                </Carousel> */}
+                <Carousel dynamicHeight="true">
+                  <div>
+                    <img src={offerSelected.main_picture} alt="main" />
+                  </div>
+                  <div>
+                    <img src={offerSelected.galery_picture_1} alt="galery_1" />
+                  </div>
+                  <div>
+                    <img src={offerSelected.galery_picture_2} alt="galery_2" />
+                  </div>
+                  <div>
+                    <img src={offerSelected.galery_picture_3} alt="galery_3" />
+                  </div>
+                  <div>
+                    <img src={offerSelected.galery_picture_4} alt="galery_4" />
+                  </div>
+                  <div>
+                    <img src={offerSelected.galery_picture_5} alt="galery_5" />
+                  </div>
+              </Carousel>
               </div>
             </div>
             <div className="offer__main">
               <div
                 className="offer__main__description"
                 dangerouslySetInnerHTML={{
-                  __html: offerSelected.offer.body,
+                  __html: offerSelected.body,
                 }}
               />
               <div className="offer__main__calendar">
@@ -157,35 +178,19 @@ const Offer = ({ match }) => {
               </div>
             </div>
             <div className="offer__main__buttons">
-              <Button
-                animated
-                className="offer__main__buttons__contact"
-                color="brown"
-              >
-                <Button.Content visible>
-                  Contacter le propriétaire
-                </Button.Content>
-                <Button.Content hidden>
-                  <Icon name="envelope" />
-                </Button.Content>
-              </Button>
               <Link to={logged ? `/offers/${id}/booking` : '/signin'}>
                 <Button
-                  animated
                   className="offer__main__buttons__book"
-                  color="teal"
+                  color="brown"
                 >
-                  <Button.Content visible>Réserver</Button.Content>
-                  <Button.Content hidden>
-                    <Icon name="bookmark" />
-                  </Button.Content>
+                  <Button.Content visible><Icon name="bookmark" />Réserver</Button.Content>
                 </Button>
               </Link>
               {role === 'admin' && (
                 <Modal
                   // closeIcon
                   open={isModalOpen}
-                  trigger={<Button color="red">Supprimer l'annonce</Button>}
+                  trigger={<Button color="red"><Icon name="trash" />Supprimer l'annonce</Button>}
                   onClose={hideModal}
                   onOpen={showModal}
                 >

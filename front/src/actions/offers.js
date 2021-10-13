@@ -60,10 +60,11 @@ export const setOfferField = (value, name) => (
 
 export const SET_INPUT_FILE = 'SET_INPUT_FILE';
 
-export const setInputFile = (event, name) => ({
+export const setInputFile = (event, name, value) => ({
   type: SET_INPUT_FILE,
   event,
   name,
+  value,
 });
 
 export const SELECT_LOCATION = 'SELECT_LOCATION';
@@ -148,5 +149,21 @@ export const SAVE_BOOKING_DATES = 'SAVE_BOOKING_DATES';
 export const saveBookingDates = () => (
   {
     type: SAVE_BOOKING_DATES,
+  }
+);
+
+export const FETCH_BOOKINGS= 'FETCH_BOOKINGS';
+
+export const fetchBookings = () => (
+  {
+    type: FETCH_BOOKINGS,
+  }
+);
+
+export const SET_BOOKINGS = 'SET_BOOKINGS';
+export const setBookings = (bookings) => (
+  {
+    type: SET_BOOKINGS,
+    bookings,
   }
 );

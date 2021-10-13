@@ -2,7 +2,7 @@
 
 import { Button, Icon, Form } from 'semantic-ui-react';
 
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -26,6 +26,7 @@ const Signin = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     dispatch(login());
+    // dispatch(goBack());
   };
 
   if (logged) {
@@ -34,6 +35,7 @@ const Signin = () => {
 
   return (
     <main className="signin">
+      {/* <h2>Connexion</h2> */}
       <Form className="signin__form" autoComplete="on" onSubmit={handleSubmit}>
         <Field
           name="email"
@@ -51,16 +53,21 @@ const Signin = () => {
         />
         <div className="signin__form__buttons">
           <Button
-            animated
             className="signin__form__button"
             color="brown"
             type="submit"
           >
-            <Button.Content visible>Se connecter</Button.Content>
-            <Button.Content hidden>
-              <Icon name="sign in" />
-            </Button.Content>
+            <Button.Content visible><Icon name="sign in" />Se connecter</Button.Content>
           </Button>
+          <Link to="/signup">
+          <Button
+            className="signin__form__button"
+            color="teal"
+            type="submit"
+          >
+            <Button.Content visible><Icon name="plus" />S'inscrire</Button.Content>
+          </Button>
+          </Link>
         </div>
       </Form>
     </main>

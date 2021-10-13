@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable camelcase */
 
-import { Form, Button, Select } from 'semantic-ui-react';
+import { Form, Button, Select, Icon } from 'semantic-ui-react';
 
-import { useHistory } from 'react-router-dom';
+//import { useHistory } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -57,7 +57,7 @@ const Createoffer = () => {
     dispatch(setOfferField(value, name));
   };
 
-  const changeFileField = (value, name) => {
+  const changeFileField = (value, name, event) => {
     dispatch(setInputFile(value, name));
   };
 
@@ -72,7 +72,7 @@ const Createoffer = () => {
 
   return (
     <main className="create-offer">
-      <h2 className="create-offer__title">Créez une nouvelle annonce</h2>
+      <h2 className="create-offer__title">Nouvelle annonce</h2>
       <Form className="create-offer__form" encType="multipart/form-data" onSubmit={handleSubmit}>
         <Field
           name="title"
@@ -90,42 +90,42 @@ const Createoffer = () => {
         />
         <Field
           name="main_picture"
-          value={main_picture}
+          value={main_picture.name}
           type="file"
           placeholder="Photo principale"
           onChange={changeFileField}
         />
         <Field
           name="galery_picture_1"
-          value={galery_picture_1}
+          value={galery_picture_1.name}
           type="file"
           placeholder="Photo 1"
           onChange={changeFileField}
         />
         <Field
           name="galery_picture_2"
-          value={galery_picture_2}
+          value={galery_picture_2.name}
           type="file"
           placeholder="Photo 2"
           onChange={changeFileField}
         />
         <Field
           name="galery_picture_3"
-          value={galery_picture_3}
+          value={galery_picture_3.name}
           type="file"
           placeholder="Photo 3"
           onChange={changeFileField}
         />
         <Field
           name="galery_picture_4"
-          value={galery_picture_4}
+          value={galery_picture_4.name}
           type="file"
           placeholder="Photo 4"
           onChange={changeFileField}
         />
         <Field
           name="galery_picture_5"
-          value={galery_picture_5}
+          value={galery_picture_5.name}
           type="file"
           placeholder="Photo 5"
           onChange={changeFileField}
@@ -211,7 +211,9 @@ const Createoffer = () => {
           onChange={changeLocation}
           value={location_id}
         />
-        <Button color="blue" className="create-offer__form__button__validate" type="submit">Valider</Button>
+        <div className="create-offer__form__buttons">
+          <Button color="teal" type="submit"><Icon name="checkmark" />Valider</Button>
+        </div>
         {/* <Button color="blue" className="create-offer__form__button__save">Sauvegarder</Button>
         <Button color="green" className="create-offer__form__button__publish">Publier</Button> */}
       </Form>

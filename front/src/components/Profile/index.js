@@ -10,6 +10,7 @@ import {
   updateUser,
   setUpdateMode,
   saveUserData,
+  fetchUserData,
 } from '../../actions/user';
 
 import Field from '../Field';
@@ -48,6 +49,7 @@ const Profile = () => {
     event.preventDefault();
     dispatch(updateUser());
     dispatch(setUpdateMode());
+    // dispatch(fetchUserData());
   };
 
   const toggleUpdateMode = (event) => {
@@ -59,15 +61,22 @@ const Profile = () => {
     event.preventDefault();
   };
 
-  const user = localStorage.getItem('user');
-  const parsedUser = JSON.parse(user);
+  // const user = localStorage.getItem('user');
+  // const parsedUser = JSON.parse(user);
+
+  // useEffect(
+  //   () => {
+  //     dispatch(saveUserData(parsedUser));
+  //   },
+  //   [],
+  // );
 
   useEffect(
     () => {
-      dispatch(saveUserData(parsedUser));
+      dispatch(fetchUserData());
     },
     [],
-  );
+  )
 
   return (
     <main className="profile">
@@ -167,40 +176,21 @@ const Profile = () => {
         )}
         <div className="profile__form__buttons">
           <Button
-            animated
             className="signup__form__buttons__modify"
             color="brown"
             onClick={toggleUpdateMode}
             type="submit"
           >
-            <Button.Content visible>Modifier</Button.Content>
-            <Button.Content hidden>
-              <Icon name="save" />
-            </Button.Content>
+            <Button.Content visible><Icon name="save" />Modifier</Button.Content>
           </Button>
           {updateMode && (
           <Button
-            animated
             color="teal"
             className="profile__form__buttons__validate"
           >
-            <Button.Content visible>Valider</Button.Content>
-            <Button.Content hidden>
-              <Icon name="checkmark" />
-            </Button.Content>
+            <Button.Content visible><Icon name="checkmark" />Valider</Button.Content>
           </Button>
           )}
-          <Button
-            animated
-            className="signup__form__buttons__delete"
-            color="red"
-            onClick={deleteAccount}
-          >
-            <Button.Content visible>Supprimer mon compte</Button.Content>
-            <Button.Content hidden>
-              <Icon name="trash" />
-            </Button.Content>
-          </Button>
         </div>
       </Form>
     </main>

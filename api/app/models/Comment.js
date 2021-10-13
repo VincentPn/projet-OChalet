@@ -11,6 +11,21 @@ class Comment extends CoreModel {
         }
     }
 
+    static async findByOfferId(id) {
+        try {
+          const {rows} = await db.query(`SELECT * FROM "${this.tableName}" WHERE "offer_id" = $1`, [id]);
+          const instances = [];
+          for(const instance of rows) {
+              instances.push(new this(instance));
+          }
+          return instances;
+          
+        } catch(error) {
+          if(error.detail) throw new Error(error.detail);
+          throw error;
+        }
+    }
+
 }
 
 

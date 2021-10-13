@@ -22,4 +22,59 @@
     margin: 1.6rem 0;
     line-height: 1.6;
   }
+
+  & .accordion {
+    border: none;
+
+    &__item {
+      border: none;
+    }
+
+    &__heading {
+      border: none;
+    }
+
+    &__button {
+      margin: 2rem 0;
+      border-radius: .6rem;
+      background-color: #f0f8ffa8;
+      box-shadow: 0 0 20px #333;
+      transition: .3s;
+
+      &:hover {
+        background-color: #a5673f;
+        color: #EAEAEA;
+      }
+    }
+  
+    &__panel {
+      padding: 0 2rem;
+      color: #EAEAEA;
+      text-shadow: 0 0 2px #000;
+      border: none;
+
+      &-raa-0 {
+        border: none;
+      }
+    }
+  }
+
+  .oclock-masters {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    & img {
+      width: 300px;
+      border-radius: 50%;
+    }
+
+    & h3 {
+      position: absolute;
+      bottom: 10px;
+      font-size: 3rem;
+      text-shadow: 0 0 2px #000;
+    }
+  }
 }

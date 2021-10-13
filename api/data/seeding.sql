@@ -64,5 +64,9 @@ INSERT INTO "offer" (
 );
 
 
+INSERT INTO "user" ("id", "firstname", "lastname", "email", "password") OVERRIDING SYSTEM VALUE VALUES
+(666, 'deletedUser', 'deleterUser', 'deletedUser', 'deletedUser');
+
+
 
 COMMIT;

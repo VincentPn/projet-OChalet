@@ -9,7 +9,6 @@ import Field from '../Field';
 
 import {
   setUserField,
-  setUpdateMode,
   saveUserData,
   fetchStripeInfos,
 } from '../../actions/user';
@@ -29,7 +28,6 @@ const Bookingform = () => {
     city_name,
     country,
     phone,
-    updateMode,
   } = useSelector((state) => state.user);
 
   const dateRange = useSelector((state) => (state.offers.dateRange));
@@ -40,13 +38,7 @@ const Bookingform = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // dispatch(setUpdateMode());
     dispatch(fetchStripeInfos());
-  };
-
-  const toggleUpdateMode = (event) => {
-    event.preventDefault();
-    dispatch(setUpdateMode());
   };
 
   const user = localStorage.getItem('user');
@@ -56,6 +48,7 @@ const Bookingform = () => {
     () => {
       dispatch(saveUserData(parsedUser));
     },
+    // eslint-disable-next-line
     [],
   );
 
@@ -70,7 +63,6 @@ const Bookingform = () => {
           type="text"
           placeholder="Nom"
           onChange={changeField}
-          updateMode={!updateMode}
         />
         <Field
           name="firstname"
@@ -78,7 +70,6 @@ const Bookingform = () => {
           type="text"
           placeholder="Prénom"
           onChange={changeField}
-          updateMode={!updateMode}
         />
         <Field
           name="email"
@@ -86,7 +77,6 @@ const Bookingform = () => {
           type="email"
           placeholder="Email"
           onChange={changeField}
-          updateMode={!updateMode}
         />
         <Field
           name="street_number"
@@ -94,7 +84,6 @@ const Bookingform = () => {
           type="text"
           onChange={changeField}
           placeholder="Numéro de rue"
-          updateMode={!updateMode}
         />
         <Field
           name="street_name"
@@ -102,7 +91,6 @@ const Bookingform = () => {
           type="text"
           onChange={changeField}
           placeholder="Nom de rue"
-          updateMode={!updateMode}
         />
         <Field
           name="zip_code"
@@ -110,7 +98,6 @@ const Bookingform = () => {
           type="text"
           onChange={changeField}
           placeholder="Code postal"
-          updateMode={!updateMode}
         />
         <Field
           name="city_name"
@@ -118,7 +105,6 @@ const Bookingform = () => {
           type="text"
           onChange={changeField}
           placeholder="Ville"
-          updateMode={!updateMode}
         />
         <Field
           name="country"
@@ -126,7 +112,6 @@ const Bookingform = () => {
           type="text"
           onChange={changeField}
           placeholder="Pays"
-          updateMode={!updateMode}
         />
         <Field
           name="phone"
@@ -134,11 +119,10 @@ const Bookingform = () => {
           type="text"
           onChange={changeField}
           placeholder="Numéro de téléphone"
-          updateMode={!updateMode}
         />
         <div>
           <h2 className="booking__title">Vos dates de séjour</h2>
-          <p>Du { format(dateRange.startDate, 'dd/MM/yyyy') } au { format(dateRange.endDate, 'dd/MM/yyyy') }</p>
+          <p className="booking__form__dates">Du { format(dateRange.startDate, 'dd/MM/yyyy') } au { format(dateRange.endDate, 'dd/MM/yyyy') }</p>
         </div>
         <div className="booking__legals">
           <label htmlFor="CGV">
@@ -146,41 +130,13 @@ const Bookingform = () => {
           </label>
         </div>
         <div className="booking__form__buttons">
-          <Button
-            animated
-            className="booking__form__buttons__modify"
-            color="brown"
-            onClick={toggleUpdateMode}
-            type="submit"
-          >
-            <Button.Content visible>Modifier</Button.Content>
-            <Button.Content hidden>
-              <Icon name="save" />
-            </Button.Content>
-          </Button>
-          {updateMode && (
-          <Button
-            animated
-            color="teal"
-            className="booking__form__buttons__validate"
-          >
-            <Button.Content visible>Valider</Button.Content>
-            <Button.Content hidden>
-              <Icon name="checkmark" />
-            </Button.Content>
-          </Button>
-          )}
           <Link to="/booking-payment">
             <Button
-              animated
               className="booking__form__buttons__book"
               color="green"
               type="submit"
             >
-              <Button.Content visible>Réserver</Button.Content>
-              <Button.Content hidden>
-                <Icon name="checkmark" />
-              </Button.Content>
+              <Button.Content visible><Icon name="bookmark" />Réserver</Button.Content>
             </Button>
           </Link>
         </div>

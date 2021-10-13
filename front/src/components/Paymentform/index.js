@@ -105,7 +105,13 @@ export default function Paymentform2() {
   return (
     <form id='payment-form' onSubmit={handleSubmit}>
       <h2>Paiement</h2>
-      <CardElement id='card-element' options={cardStyle} onChange={handleChange} />
+      <CardElement 
+        id='card-element' 
+        options={
+          {hidePostalCode: true}
+        } 
+        onChange={handleChange}
+      />
       <button
         disabled={processing || disabled || succeeded}
         id='submit'
@@ -127,12 +133,7 @@ export default function Paymentform2() {
       {/* Show a success message upon completion */}
       <p className={succeeded ? 'result-message' : 'result-message hidden'}>
         Paiement réussi !
-        <a
-          href={`https://dashboard.stripe.com/test/payments`}
-        >
-          {' '}
-          Stripe dashboard.
-        </a> Actualiser la page pour payer à nouveau.
+        Redirection en cours...
       </p>
     </form>
   );

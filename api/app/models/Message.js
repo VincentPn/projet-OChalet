@@ -14,7 +14,7 @@ class Message extends CoreModel {
     static async deleteByUserId(id) {
         try {
           
-          await db.query('DELETE FROM "message" WHERE "user_id" = $1', [id])
+          await db.query('DELETE FROM "message" WHERE "user_id" = $1', [id]);
   
         } catch (error) {
           if(error.detail) throw new Error(error.detail);

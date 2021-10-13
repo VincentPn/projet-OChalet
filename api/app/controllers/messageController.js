@@ -7,9 +7,11 @@ const messageController = {
             const messages = await Message.findAll();
             for(const message of messages) {
               
-              for(const field in message) !message[field] ? delete message[field] : null
+              for(const field in message) {
+                  if(!message[field] && field !== "message_status") delete message[field]
+              }
               
-            }
+            };
             response.json(messages);
         } catch(error) {
             response.status(500).send(error.message);
@@ -18,8 +20,11 @@ const messageController = {
 
     findByUserId: async (request, response) => {
       try {
-          const message = await Message.findByUserId(parseInt(request.token.id, 10));
-          response.json(message);
+          const messages = await Message.findByUserId(parseInt(request.token.id, 10));
+          for (const message of messages){
+              for (const field in message) !message[field] ? delete message[field] : null 
+          }
+          response.json(messages);
       } catch(error) {
           response.status(500).send(error.message);
       }
@@ -28,7 +33,7 @@ const messageController = {
   create: async (request, response) => {
     try {
       request.body.user_id = request.token.id
-      const newMessage = new Message(request.body).create()
+      const newMessage = await new Message(request.body).create()
       response.status(201).json(newMessage);
 
     } catch (error) {
@@ -38,13 +43,18 @@ const messageController = {
 
   update: async (request, response) => {
     try {
+        const {id, message_status} = request.body;
 
-        await new Message(request.body).update()
+        const message = await Message.findById(id);
+        if(!message) return response.status(404).send("message not found");
+        message.message_status = message_status;
+        
+        await message.update();
     
-        response.status(204).json('Update done');
+        response.status(200).json(`Message with id ${id} updated`);
 
     } catch (error) {
-            response.status(500).send(error.message);
+        response.status(500).send(error.message);
     }
   },
 

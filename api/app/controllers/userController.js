@@ -19,7 +19,7 @@ const userController = {
 
     findById: async (request, response) => {
         try {
-            const user = await User.findById(parseInt(request.token.id, 10));
+            const user = await User.findById(request.token.id, 10);
             delete user.password
             for(const key in user) !user[key] ? delete user[key] : null
 
@@ -33,22 +33,24 @@ const userController = {
 
     update: async (request, response) => {
         try {
+            const user = await User.findById(request.token.id);
+
             if(request.body.password) {
-              delete request.body.passwordConfirm
+              delete request.body.passwordConfirm;
               const salt = await bcrypt.genSalt(10);
-              request.body.password = await bcrypt.hash(request.body.password, salt);
-            }else {
-              const user = await User.findById(request.token.id)
-              request.body.password = user.password
+              user.password = await bcrypt.hash(request.body.password, salt);
             }
-            
-            request.body.id = request.token.id
+            else {
+                for(const field in request.body){
+                    user[field] = request.body[field];
+                }
+            }
+
+            await user.update();
          
-            await new User(request.body).update()
             response.status(204).json('Update done');
 
         } catch (error) {
-          console.log(error)
             response.status(500).send(error.message);
         }
     },
@@ -57,22 +59,20 @@ const userController = {
         try {
 
             let userID;
-            userID = parseInt(request.token.id, 10);
+            if(request.token.role === "user") userID = request.token.id
+            else if(request.token.role === "admin" && request.query.id !== 666 && request.query.id !== request.token.id) userID = request.query.id;
+            else return response.status(401).send({error: "Unauthorized"})
 
+            await Comment.setUserUnknown(userID);
+            await Message.deleteByUserId(userID);
+            await Booking.setUserUnknown(userID);
 
-            if(request.token.role === "admin") userID = parseInt(request.query.id, 10);
+            const userDelete = await User.delete(userID);
+            if(!userDelete) return response.status(404).send({error: `User with id ${userID} not found`});
 
-            await Comment.setUserUnknown(userID)
-            
-            await Message.deleteByUserId(userID)
-
-            await Booking.setUserUnknown(userID)
-
-            await User.delete(userID);
             response.status(200).json(`User with id ${userID} deleted`);
 
         } catch(error) {
-            console.log(error)
             response.status(500).send(error.message);
         }
     }

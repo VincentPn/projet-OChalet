@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Form } from 'semantic-ui-react';
 
-import './field.scss';
+//import './field.scss';
 
 const Field = ({
   name, value, type, placeholder, onChange, updateMode,
@@ -11,7 +11,7 @@ const Field = ({
   const handleChange = (event) => {
     if (event.target.type === 'file') {
       name += ' ';
-      onChange(event.target.files[0], name);
+      onChange(event.target.files[0], name, event);
     }
     else onChange(event.target.value, name);
   };
@@ -43,8 +43,8 @@ Field.propTypes = {
   updateMode: PropTypes.bool.isRequired,
 };
 
-Field.defaultProps = {
-  value: '',
-};
+// Field.defaultProps = {
+//   value: '',
+// };
 
 export default Field;

@@ -10,6 +10,7 @@ import {
   OPEN_MODAL,
   CLOSE_MODAL,
   REMOVE_OFFER_FROM_STATE,
+  SET_BOOKINGS,
 } from '../actions/offers';
 
 export const initialState = {
@@ -41,6 +42,7 @@ export const initialState = {
     key: 'dateRange',
   },
   offerSelected: null,
+  bookings: null,
 };
 
 const reducer = (state = initialState, action = {}) => {
@@ -70,7 +72,7 @@ const reducer = (state = initialState, action = {}) => {
         ...state,
         newoffer: {
           ...state.newoffer,
-          [action.name]: file,
+          [action.name] : file,
         },
       };
     case SELECT_LOCATION:
@@ -114,6 +116,11 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         offers: state.offers.filter((offer) => offer.id !== action.data),
+      };
+    case SET_BOOKINGS:
+      return {
+        ...state,
+        bookings: action.bookings,
       };
     default:
       return state;

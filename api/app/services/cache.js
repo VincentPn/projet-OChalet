@@ -1,41 +1,39 @@
-const asyncClient = require('../utils/redis_promisify')
-const {decryptAccessToken} = require('./authJwt')
+const asyncClient = require('../utils/redisPromisify')
+const {decryptAccessToken} = require('./jsonWebToken')
 
 
-const TIMEOUT = 60 * 30; // 30 minutes
+const TIMEOUT = 60 * 10; // 10 minutes
 
 const keys = [];
 
 
-module.exports = async (req, res, next) => {
+module.exports = async (request, response, next) => {
   
     try {
-        console.log('actual cached keys', keys)
-        if(req.method === "GET"){
+        console.log('actual cached keys', keys);
+        if(request.method === "GET"){
           
           let key;
-    
-          const match = req.url.match(/admin|refresh|locations|offers/)
+          const match = request.url.match(/admin|refresh|locations|offers|offer/);
          
-          if(match) key = req.url
-          else {
-            const {id} = await decryptAccessToken(req.headers["authorization"])
-            key = req.url + id 
+          if(match) key = request.url
+          else if(request.headers["authorization"]) {
+            const {id} = await decryptAccessToken(request.headers["authorization"]);
+            key = request.url + id;
           }
+          else return next();
           
-    
-
-          if (keys.includes(key) && await asyncClient.exists(key)) {
+          if (keys.includes(key)) {
               const value =  JSON.parse(await asyncClient.get(key));
-              console.log('cached response')
-              res.json(value);
+              console.log('cached response');
+              response.json(value);
           } 
-          else if(req.url.includes('refresh')) return next()
+          else if(request.url.includes('refresh')) return next()
           else {
              
-              const originalJson = res.json.bind(res);
+              const originalJson = response.json.bind(response);
 
-              res.json = async (data) => {
+              response.json = async (data) => {
                   
                   const stringifyedData = JSON.stringify(data);
 
@@ -43,45 +41,44 @@ module.exports = async (req, res, next) => {
 
                   keys.push(key);
 
-                  console.log("modified json")
+                  console.log("modified json");
 
-                  originalJson(data);
-                        
+                  originalJson(data);        
               }
 
               next();
           }
         }else {
-            let url = req.url
-            if(url.includes("?")) url = url.split('?').shift()
+            let url = request.url;
+            if(url.includes("?")) url = url.split('?').shift();
           
             const cachedKeys = keys.filter(key => {
               
               if(url.split('/').length === 2){
-                const check = url.split('/')[1]
-                if(key.includes(check)) return true
+                const check = url.split('/')[1];
+                if(key.includes(check)) return true;
+                if(check.includes("signup") && key.includes("admin/user") ) return true;
               }
               else {
-                const check = url.split('/')[2]
-                if(key.includes(check)) return true
+                const check = url.split('/')[2];
+                if(key.includes(check)) return true;
               }
-            })
+            });
            
-            if(!cachedKeys.length) return next()
+            if(!cachedKeys.length) return next();
 
             console.log('Removing keys', cachedKeys);
 
             await asyncClient.del(cachedKeys);
             
-            for(const key of cachedKeys) keys.splice(keys.indexOf(key), 1)
-            cachedKeys.length = 0
+            for(const key of cachedKeys) keys.splice(keys.indexOf(key), 1);
+            cachedKeys.length = 0;
             
             next();
         }
 
     } catch (error) {
-        console.log(error.message)
-        res.status(401).send(error.message)
+        response.status(401).send(error.message);
     }
 }
 

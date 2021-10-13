@@ -101,4 +101,4 @@ module.exports = (token) => {
   </body>
   </html>
   `
-}
+};

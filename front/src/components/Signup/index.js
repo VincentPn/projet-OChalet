@@ -31,6 +31,7 @@ const Signup = () => {
 
   return (
     <main className="signup">
+      {/* <h2>Inscription</h2> */}
       <Form className="signup__form" onSubmit={handleSubmit}>
         <Field
           name="lastname"
@@ -69,27 +70,19 @@ const Signup = () => {
         />
         <div className="signup__form__buttons">
           <Button
-            animated
             className="signup__form__button__signup"
             color="brown"
             type="submit"
           >
-            <Button.Content visible>S'inscrire</Button.Content>
-            <Button.Content hidden>
-              <Icon name="plus" />
-            </Button.Content>
+            <Button.Content visible><Icon name="plus" />S'inscrire</Button.Content>
           </Button>
           <Link to="/signin" className="signup__button__signin">
             <Button
-              animated
               className="signup__form__button__signup"
               color="teal"
               type="submit"
             >
-              <Button.Content visible>J'ai déjà un compte</Button.Content>
-              <Button.Content hidden>
-                <Icon name="sign in" />
-              </Button.Content>
+              <Button.Content visible><Icon name="sign in" />J'ai déjà un compte</Button.Content>
             </Button>
           </Link>
         </div>

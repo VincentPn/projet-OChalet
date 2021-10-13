@@ -1,17 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
 .create-offer{
-  width: 50%;
-  min-width: 500px;
+  flex: 1;
+  width: 100%;
   margin: 3rem auto;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
 
   &__title{
-    margin: 3rem auto;
-    font-size: 2rem;
-    font-weight: bold;
+    font-family: 'Patrick Hand', cursive;
+    font-size: 3rem;
+    color: #EAEAEA;
+    text-shadow: 0 0 3px #000;
+    margin-bottom: 2rem;
   }
 
   &__form{
+    width: 50%;
+    min-width: 300px;
     &__ck-label {
       color: #f1f1f1;
       text-shadow: 0 0 3px #000;
@@ -23,9 +31,10 @@
       margin-top: .2rem;
     }
 
-    &__button{
+    &__buttons{
       display: flex;
-      justify-content: space-evenly;  
+      justify-content: center;
+      margin-top: 2rem;
     }
   }
 }

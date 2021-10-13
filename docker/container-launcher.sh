@@ -6,13 +6,13 @@ red_text=`tput setaf 1`
 reset_color=`tput sgr0`
 
 # REQUIERED VARIABLES
-DB_USERNAME="ochalet"
-DB_PASSWORD="ochalet"
+DB_USERNAME="exemple"
+DB_PASSWORD="exemple"
 DB_PORT="5432"
-DB_NAME="ochalet"
+DB_NAME="exemple"
 
-PATH_TO_REPO="/home/jerome/projets-local/linode-api/"
-REPO_NAME="projet-06-ochalet"
+PATH_TO_REPO="/exemple/exemple/"
+REPO_NAME="exemple"
 
 PATH_TO_MAIN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.main.yml"
 PATH_TO_DEBIAN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.debian.yml"
@@ -21,21 +21,22 @@ PATH_TO_DEBIAN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.debia
 ENABLE_OPTIONAL_MODULES="true"
 
 ## db dump and send to another server via ssh for backup
-ENABLE_BACKUP_SSH="false"
-BACKUP_SERVER_SSH="pi@rpiweb.hopto.org"
-BACKUP_SERVER_SSH_PORT="5000"
-PATH_ON_BACKUP_SERVER="/home/pi/test2"
+ENABLE_BACKUP_SSH="true"
+BACKUP_SERVER_SSH="exemple"
+BACKUP_SERVER_SSH_PORT="exemple"
+PATH_ON_BACKUP_SERVER="exemple"
 
 
 ## setup cronjob for periodical dump
-ENABLE_DUMP_CRON="false"
-CRONJOB="0 4 * * *"
+ENABLE_DUMP_CRON="true"
+CRONJOB="*/1 * * * *"
 DELETE_OLDER_THAN_DAYS=5
 
 ## use sqitch for db structure
 ENABLE_SQITCH="true"
 PATH_TO_SQITCH_FOLDER="$PATH_TO_REPO$REPO_NAME/api/migrations"
-
+# if you have seeding file
+PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/seeding.sql"
 
 ## seeding database
 ENABLE_SEEDING="true"
@@ -55,18 +56,6 @@ while true; do
         * ) echo "Please answer yes or no.";;
     esac
 done
-
-touch container-stopper.sh
-echo " " >> container-stopper.sh
-sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE down -v && docker image rm api:v1.0.0" container-stopper.sh
-
-touch api-stopper.sh
-echo " " >> api-stopper.sh
-sed -i "1c docker stop api && docker rm api && docker image rm api:v1.0.0" api-stopper.sh
-
-touch api-rebuilder.sh
-echo " " >> api-rebuilder.sh
-sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE up -d" api-rebuilder.sh
 
 touch .env_postgres
 echo " " >> .env_postgres
@@ -234,26 +223,8 @@ sed -i '4c PATH_TO_SEEDING_FILE=' modules/sqitch.sh
 sed -i '5c DB_URI=' modules/sqitch.sh
 
 
-rm .env_postgres && touch .env_postgres
-rm .env_api && touch .env_api
 
 
 
-#On flush
-iptables -F INPUT
-iptables -F OUTPUT
-
-#Politiques
-iptables -P OUTPUT ACCEPT
-iptables -P INPUT ACCEPT
-iptables -P FORWARD ACCEPT
-
-#Autoriser le loopback
-iptables -A INPUT -i lo -j ACCEPT
-iptables -A OUTPUT -o lo -j ACCEPT
-
-#Connexion etablie
-iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 

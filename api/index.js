@@ -5,14 +5,13 @@ const cors = require('cors');
 const swaggerUI = require("swagger-ui-express");
 const rateLimit = require('express-rate-limit');
 const docs = require('./docs/swagger');
-if(process.env.NEWSLETTER) require("./app/services/newsletter")
-
+require('./app/services/scheduledTasks')
 
 const app = express();
 const port = process.env.PORT || 5000
 
 app.use(express.json());
-app.use(express.urlencoded({extended:true}))
+app.use(express.urlencoded({extended:true}));
 
 app.use(cors());
 
@@ -25,7 +24,6 @@ app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(docs));
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.use(router);
-
 
 app.listen(port, () => {
     console.log(`Server started on http://localhost:${port}\nApi docs available on http://localhost:${port}/api-docs`)

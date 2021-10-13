@@ -62,7 +62,7 @@ const reducer = (state = initialState, action = {}) => {
         street_name: action.data.street_name,
         street_number: action.data.street_number,
         password: '',
-        // role: action.data.role,
+        role: action.data.role,
       };
     case SIGNOUT:
       return {

@@ -1,22 +1,27 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+
+import { useSelector, useDispatch } from 'react-redux';
 // import { useEffect } from 'react';
 
-// import { fetchLocations, fetchOffers } from '../../actions/offers';
+import { fetchLocations, fetchOffers } from '../../actions/offers';
 
 import LocationCard from '../Cards/LocationCard';
 
 import './locations.scss';
 
 const Locations = () => {
-  // const dispatch = useDispatch();
-  const locations = useSelector((state) => state.offers.locations);
+  const dispatch = useDispatch();
 
-  // useEffect(
-  //   () => {
-  //     dispatch(fetchLocations());
-  //   },
-  //   [],
-  // );
+  // dispatch(fetchLocations);
+
+  useEffect(
+    () => {
+      dispatch(fetchLocations());
+    },
+    [],
+  );
+
+  const locations = useSelector((state) => state.offers.locations);
 
   // useEffect(
   //   () => {

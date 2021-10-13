@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import { signout } from '../../actions/user';
 
-import './signout.scss';
+// import './signout.scss';
 
 const Signout = () => {
   const dispatch = useDispatch();

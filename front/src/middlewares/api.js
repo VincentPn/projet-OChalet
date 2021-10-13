@@ -15,6 +15,8 @@ import {
   setOffer,
   DELETE_OFFER,
   SAVE_BOOKING_DATES,
+  FETCH_BOOKINGS,
+  setBookings,
 } from '../actions/offers';
 
 import {
@@ -29,8 +31,9 @@ import {
 } from '../actions/user';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://139.162.194.55:3000',
-  // baseURL: 'http://localhost:5000',
+  // baseURL: 'http://ochaleto.ddns.net',
+  baseURL: 'http://178.79.168.163:3000',
+  // baseURL: 'http://localhost:3000',
 });
 
 export default (store) => (next) => async (action) => {
@@ -75,6 +78,9 @@ export default (store) => (next) => async (action) => {
         .then(
           (response) => {
             store.dispatch(signup(response.data));
+            // if (response.data) {
+              window.location = '/signin';
+            // }
           },
         ).catch(
           (error) => console.log(error.message),
@@ -141,6 +147,7 @@ export default (store) => (next) => async (action) => {
         .then(
           (response) => {
             store.dispatch(saveUserData(response.data));
+            window.location = '/profile';
           },
         )
         .catch(
@@ -182,7 +189,10 @@ export default (store) => (next) => async (action) => {
         let spacelessKey;
         if (key.match(/ /)) {
           spacelessKey = key.slice(0, -1);
+          console.log("1er -", data);
+          console.log(store.getState().offers.newoffer[key]);
           data.append(spacelessKey, store.getState().offers.newoffer[key]);
+          console.log("2eme -", data);
         }
         else data.append(key, store.getState().offers.newoffer[key]);
       }
@@ -215,11 +225,11 @@ export default (store) => (next) => async (action) => {
       axiosInstance
         .get(
           `/offers?id=${action.offerId}`,
-        )
-        .then(
-          (response) => {
-            // console.log('test : ', response.data);
-            store.dispatch(setOffer(response.data));
+          )
+          .then(
+            (response) => {
+              // console.log('test : ', response.data);
+              store.dispatch(setOffer(response.data));
           },
         );
       next(action);
@@ -241,7 +251,6 @@ export default (store) => (next) => async (action) => {
               window.location = '/account/admin';
             }
           },
-          
         ).catch(
           (error) => console.log(error.message),
         );
@@ -250,7 +259,7 @@ export default (store) => (next) => async (action) => {
     }
     case FETCH_STRIPE_INFOS: {
       const token = localStorage.getItem('token');
-      const offerID = store.getState().offers.offerSelected.offer.id;
+      const offerID = store.getState().offers.offerSelected.id;
       const customer_email = store.getState().user.email;
       const booking_start = store.getState().offers.dateRange.startDate;
       const booking_end = store.getState().offers.dateRange.endDate;
@@ -295,13 +304,47 @@ export default (store) => (next) => async (action) => {
         .then(
           (response) => {
             console.log(response.data);
-          }
+              window.location = '/account/user';
+          },
         )
         .catch(
           (error) => console.log(error),
         )
         next(action);
         break;
+    }
+    case FETCH_BOOKINGS: {
+      const token = localStorage.getItem('token');
+      axiosInstance
+        .get(
+          '/bookings',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then(
+            (response) => {
+
+              const bookings = response.data;
+              const offers = store.getState().offers.offers;
+
+              const newBookings = bookings.map(booking => {
+                const offerFound = offers.find(offer => {
+                  return booking.offer_id === offer.id
+                })
+
+                return {
+                  ...booking,
+                  offer: offerFound
+                }
+              })
+
+              store.dispatch(setBookings(newBookings));
+          },
+        );
+      next(action);
+      break;
     }
     default:
       next(action);

@@ -2,28 +2,23 @@
     flex: 1;
     margin: 3rem auto;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
-    &__logo{
-    width: 500px;
-    height: 500px;
-    }
-  
-    &__title{
-    font-size: 2rem;
-    font-weight: bold;
-    }
-
     &__form{
-    width: 400px;
-    height: 400px;
-    margin-left: 3rem;
+      width: 500px;
 
-    &__buttons{
-      display: flex;
-      flex-direction: row;
-      justify-content: space-evenly;
+      &__buttons{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+      }
     }
+}
+
+@media screen and (max-width: 550px) {
+  .signup__form {
+    width: 300px;
   }
 }

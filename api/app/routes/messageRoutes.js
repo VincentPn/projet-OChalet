@@ -1,13 +1,8 @@
-const messageRouter = require('express').Router()
-const messageController = require("../controllers/messageController")
-
+const messageRouter = require('express').Router();
+const messageController = require("../controllers/messageController");
 
 messageRouter.route("/messages")
 .get(messageController.findByUserId)
-.post(messageController.create)
+.post(messageController.create);
 
-
-
-
-
-module.exports = messageRouter
+module.exports = messageRouter;

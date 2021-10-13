@@ -1,18 +1,21 @@
 const {Booking, User, Offer} = require('../models');
-const sendMail = require("../services/nodemail");
+const sendMail = require("../services/nodemailer");
 const bookingMailTemplate = require('../utils/email-templates/bookingTemplate');
-const {stripe} = require('../services/stripe2');
+const stripe = require("stripe")(process.env.STRIPE_TEST_PRIVATE_KEY)
+const dayjs = require("dayjs")
 
 const bookingController = {
 
     findAll: async (_, response) => {
         try {
             const bookings = await Booking.findAll();
-            for(const booking of bookings) {
-              
-              for(const field in booking) !booking[field] ? delete booking[field] : null
-              
-            }
+
+            for(const booking of bookings){
+              for(const field in booking){
+                if(!booking[field] && field !== "reservation_status") delete booking[field];
+              }
+            };
+            
             response.json(bookings);
         } catch(error) {
             response.status(500).send(error.message);
@@ -21,8 +24,13 @@ const bookingController = {
 
     findByUserId: async (request, response) => {
       try {
-          const booking = await Booking.findByUserId(parseInt(request.token.id, 10));
-          response.json(booking);
+          const bookings = await Booking.findByUserId(parseInt(request.token.id, 10));
+
+          for(const booking of bookings){
+            if(!booking.message) delete booking.message
+          };
+          
+          response.json(bookings);
       } catch(error) {
           response.status(500).send(error.message);
       }
@@ -32,28 +40,31 @@ const bookingController = {
     create: async (request, response) => {
         try {
           
-          const {intentID} = request.body
-          const {status, metadata} = await stripe.paymentIntents.retrieve(intentID);
-          const {booking_start, booking_end, offer_id} = metadata
-          const {id} = request.token
           
-          if(status !== 'succeeded') return response.status(401).send({message: "payment status not succeed"})
+          const { intentID } = request.body;
+          const { status, metadata } = await stripe.paymentIntents.retrieve(intentID);
+          const { booking_start, booking_end, offer_id, email } = metadata;
+          const { id } = request.token;
+
+          if(status !== 'succeeded') return response.status(401).send({message: "payment status not succeed"});
   
           const bookingData = {
-            user_id: request.token.id,
-            reservation_start: booking_start,
-            reservation_end: booking_end,
-            offer_id: offer_id,
-            user_id: id
+            user_id: id,
+            reservation_start: new Date(booking_start * 1000),
+            reservation_end: new Date(booking_end * 1000),
+            offer_id
           }
+
           
-          const newBooking = await new Booking(bookingData).create()
-          const user = await User.findById(id)
-          const offer = await Offer.findById(offer_id)
+          const newBooking = await new Booking(bookingData).create();
+          const user = await User.findById(id);
+          const offer = await Offer.findById(offer_id);
+
+          newBooking.reservation_start = dayjs(newBooking.reservation_start).format("YYYY-MM-DD")
+          newBooking.reservation_end = dayjs(newBooking.reservation_end).format("YYYY-MM-DD")
           
-       
-          const emailBody = bookingMailTemplate(user, newBooking, offer)
-          await sendMail("ochalet@gmail.com", "Booking", emailBody)
+          const emailBody = bookingMailTemplate(user, newBooking, offer);
+          await sendMail(email, "Booking", emailBody);
           
   
           response.status(201).json(newBooking);
@@ -67,17 +78,18 @@ const bookingController = {
         try {
         
           await new Booking(request.body).update()
-            response.status(204).json('Update done');
+          response.status(204).send("booking updated");
 
-    } catch (error) {
-            response.status(500).send(error.message);
-    }
+      } catch (error) {
+          response.status(500).send(error.message);
+      }
     },
 
     delete: async (request, response) => {
         try {
             const bookingID = parseInt(request.query.id, 10);
-            await Booking.delete(bookingID);
+            const bookingDelete = await Booking.delete(bookingID);
+            if(!bookingDelete) return response.status(404).send({error: `Booking with id: ${bookingID} not found`})
             response.status(200).json(`booking with id ${bookingID} deleted`);
         } catch(error) {
             response.status(500).send(error.message);

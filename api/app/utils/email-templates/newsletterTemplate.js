@@ -14,7 +14,7 @@ module.exports = (user) => {
     </header>
   
     <main style="height: 100%; display:flex; flex-direction: column; justify-content: space-evenly; align-items: center;">
-      <h1>Bonjour ${user.firstname} ${user.lastname}, profitez de nos offres exeptionnelles uniquement pour vous car vous etes special</h1>
+      <h1>Bonjour ${user.name}, profitez de nos offres exeptionnelles uniquement pour vous car vous etes special</h1>
       
       <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores magni odio sint nobis repellat veritatis architecto voluptatum cum unde dignissimos consectetur dolorum, eveniet beatae quis facilis. Molestiae tempore eveniet praesentium!</p>
       <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Harum dolor, laudantium eligendi adipisci, ipsum odio earum consequatur, vel aut veritatis provident nostrum odit minus. Fuga autem est quam cum voluptatum.</p>
@@ -30,4 +30,4 @@ module.exports = (user) => {
   </body>
   </html>
   `
-}
+};

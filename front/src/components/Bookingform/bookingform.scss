@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   &__main-title{
     font-family: 'Patrick Hand', cursive;
@@ -28,18 +29,27 @@
   }
 
   &__form{
-    width: 500px;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin: 1rem;
+    color: #EAEAEA;
+    text-shadow: 0 0 2px #000;
+
+    &__dates {
+      padding: 1rem;
+      background-color: #f0f8ffa8;
+      border-radius: .6rem;
+      text-align: center;
+      color: #333;
+      text-shadow: none;
+      font-weight: bold;
+    }
 
     &__buttons{
-      width: 40%;
-      margin: 2rem auto;
+      margin: 2rem;
       display: flex;
       justify-content:space-evenly;
       align-items: center;
       margin-bottom: 3rem;
-  }
+    }
   }
   
 

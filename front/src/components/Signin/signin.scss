@@ -2,6 +2,7 @@
   flex: 1;
   margin: 3rem auto;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
@@ -10,14 +11,14 @@
   
     &__buttons{
       display: flex;
-      justify-content: center;
+      justify-content: space-evenly;
     }
   }
 }
 
 .ui.form .field>label {
   color: #f1f1f1;
-  text-shadow: 0 0 3px #000;
+  text-shadow: 0 0 2px #000;
 }
 
 @media screen and (max-width: 550px) {

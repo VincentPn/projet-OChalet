@@ -1,13 +1,15 @@
 import { NavLink, Link } from 'react-router-dom';
 import { Dropdown } from 'semantic-ui-react';
 
+import { useSelector } from 'react-redux';
+
 import PropTypes from 'prop-types';
 
 import chalet from '../../assets/images/logo-ochalet.png';
 import './header.scss';
 
 const Header = ({ logged }) => {
-  const role = localStorage.getItem('role');
+  const role = useSelector((state) => state.user.role);
 
   const adminOptions = [
     {
@@ -94,6 +96,7 @@ const Header = ({ logged }) => {
     </header>
   );
 };
+
 Header.propTypes = {
   logged: PropTypes.bool.isRequired,
 };
