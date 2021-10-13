@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+    debian:
+      container_name: debian
+      networks:
+        - my-network
+      image: debian:stable-slim
+      command: " tail -f /dev/null"
+      volumes:
+        - db_dump:/home/
+   
+networks:
+  my-network:
+    name: my-network
+
+volumes:
+  db_dump:
+    name: db_dump

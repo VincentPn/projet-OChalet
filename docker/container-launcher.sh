@@ -21,14 +21,14 @@ PATH_TO_DEBIAN_COMPOSE_FILE="./docker-compose.debian.yml"
 ENABLE_OPTIONAL_MODULES="true"
 
 ## db dump and send to another server via ssh for backup
-ENABLE_BACKUP_SSH="false"
-BACKUP_SERVER_SSH="exemple"
-BACKUP_SERVER_SSH_PORT="exemple"
-PATH_ON_BACKUP_SERVER="exemple"
+ENABLE_BACKUP_SSH="true"
+BACKUP_SERVER_SSH="rpiweb.hopto.org"
+BACKUP_SERVER_SSH_PORT="26"
+PATH_ON_BACKUP_SERVER="/home/pi/ochalet_dump/"
 
 
 ## setup cronjob for periodical dump
-ENABLE_DUMP_CRON="false"
+ENABLE_DUMP_CRON="true"
 CRONJOB="*/1 * * * *"
 DELETE_OLDER_THAN_DAYS=5
 
