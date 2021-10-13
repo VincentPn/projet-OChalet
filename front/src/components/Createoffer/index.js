@@ -11,6 +11,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 import Field from '../Field';
+import Loading from '../Loading';
 
 import {
   // saveOfferData,
@@ -18,6 +19,7 @@ import {
   createOffer,
   selectLocation,
   setInputFile,
+  toggleLoader,
 } from '../../actions/offers';
 
 import './createoffer.scss';
@@ -45,11 +47,11 @@ const Createoffer = () => {
   } = useSelector((state) => state.offers.newoffer);
 
   const locationOptions = [
-    { key: 1, value: 1, text: 'Jura' },
-    { key: 2, value: 2, text: 'Alpes du Nord' },
-    { key: 3, value: 3, text: 'Alpes du Sud' },
-    { key: 4, value: 4, text: 'Pyrénées' },
-    { key: 5, value: 5, text: 'Massif Central' },
+    { key: 1, value: 1, text: 'Alpes du Nord' },
+    { key: 2, value: 2, text: 'Alpes du Sud' },
+    { key: 3, value: 3, text: 'Jura' },
+    { key: 4, value: 4, text: 'Massif Central' },
+    { key: 5, value: 5, text: 'Pyrénées' },
     { key: 6, value: 6, text: 'Vosges' },
   ];
 

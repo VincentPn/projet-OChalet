@@ -17,7 +17,7 @@
     text-shadow: 0 0 2px #000;
   }
 
-  &__title{
+  &__title , &__price{
     font-family: 'Patrick Hand', cursive;
     color: #EAEAEA;
     margin-top: 1rem;
@@ -25,7 +25,10 @@
     font-size: 2rem;
     font-weight: bold;
     text-shadow: 0 0 2px #000;
+  }
 
+  &__price {
+    margin-top: 1rem !important;
   }
 
   &__form{
@@ -33,7 +36,7 @@
     color: #EAEAEA;
     text-shadow: 0 0 2px #000;
 
-    &__dates {
+    &__dates, &__price {
       padding: 1rem;
       background-color: #f0f8ffa8;
       border-radius: .6rem;
@@ -42,6 +45,7 @@
       text-shadow: none;
       font-weight: bold;
     }
+
 
     &__buttons{
       margin: 2rem;

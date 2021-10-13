@@ -11,16 +11,17 @@ import {
   CLOSE_MODAL,
   REMOVE_OFFER_FROM_STATE,
   SET_BOOKINGS,
+  TOGGLE_LOADER,
 } from '../actions/offers';
 
 export const initialState = {
-  loading: true,
+  loading: false,
   open: false,
   offers: [],
   locations: [],
   newoffer: {
     title: '',
-    body: '<h2>Description</h2><p>[insérer le texte ici]</p><h2>Prestations</h2><table><tbody><tr><td><img src="https://img.icons8.com/ios-filled/30/000000/dog.png"/></td><td>Animaux autorisés</td></tr><tr><td><img src="https://img.icons8.com/glyph-neue/30/000000/wifi.png"/></td><td>Internet / Wifi</td></tr><tr><td><img src="https://img.icons8.com/ios-filled/30/000000/housekeeping.png"/></td><td>Ménage compris</td></tr><tr><td><img src="https://img.icons8.com/external-vitaliy-gorbachev-fill-vitaly-gorbachev/30/000000/external-croissant-fast-food-vitaliy-gorbachev-fill-vitaly-gorbachev.png"/></td><td>Petit-déjeuner en supplément</td></tr></tbody></table><h2>Informations complémentaires</h2><p>[insérer le texte ici]</p>',
+    body: '<h2>Description</h2><p>[insérer le texte ici]</p><h2>Capacité d\'accueil</h2><p>Entre .. et .. personnes</p><h2>Prestations</h2><table><tbody><tr><td><img src="https://img.icons8.com/ios-filled/30/000000/bed.png"/></td><td>[Nb de chambres?]</td></tr><tr><td><img src="https://img.icons8.com/ios-filled/30/000000/shower-and-tub.png"/></td><td>[Nb de salles de bain?]</td></tr><tr><td><img src="https://img.icons8.com/ios-filled/30/000000/dog.png"/></td><td>Animaux [autorisés?/refusés?]</td></tr><tr><td><img src="https://img.icons8.com/ios-filled/30/000000/retro-tv.png"/></td><td>[Tv écran plat/-]</td></tr><tr><td><img src="https://img.icons8.com/glyph-neue/30/000000/wifi.png"/></td><td>[Wifi?/-]</td></tr><tr><td><img src="https://img.icons8.com/ios-filled/30/000000/housekeeping.png"/></td><td>Ménage [compris?/en supplément?]</td></tr><tr><td><img src="https://img.icons8.com/external-vitaliy-gorbachev-fill-vitaly-gorbachev/30/000000/external-croissant-fast-food-vitaliy-gorbachev-fill-vitaly-gorbachev.png"/></td><td>Petit-déjeuner [compris?/en supplément?]</td></tr></tbody></table><h2>Informations complémentaires</h2><p>[insérer le texte ici]</p>',
     zip_code: '',
     city_name: '',
     country: '',
@@ -121,6 +122,11 @@ const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         bookings: action.bookings,
+      };
+    case TOGGLE_LOADER:
+      return {
+        ...state,
+        loading: !state.loading,
       };
     default:
       return state;

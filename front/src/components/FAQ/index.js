@@ -12,7 +12,7 @@ import {
   AccordionItemPanel,
 } from 'react-accessible-accordion';
 
-import 'react-accessible-accordion/dist/fancy-example.css';
+// import 'react-accessible-accordion/dist/fancy-example.css';
 
 import './faq.scss';
 
@@ -33,7 +33,7 @@ const Faq = () => {
                     </AccordionItemHeading>
                     <AccordionItemPanel>
                         <p>
-                          C'est très simple ! La seule contrainte est d'être connecté à votre espace utilisateur (ou d'en créer un si vous n'en avez pas). Il vous suffit ensuite d'aller sur l'annonce souhaitée, de choisir vos dates et des cliquer sur le bouton réserver (les dates grisées dans le calendrier ne sont plus disponibles). Vous vérifiez ensuite vos informations et validez. Vient alors l'étape du paiement. La réservation sera effective après validation de votre règlement.
+                          C'est très simple ! La seule contrainte est d'être connecté à votre espace utilisateur (ou d'en créer un si vous n'en avez pas). Il vous suffit ensuite d'aller sur l'annonce souhaitée, de choisir vos dates et de cliquer sur le bouton réserver (les dates grisées dans le calendrier ne sont plus disponibles). Vous vérifiez ensuite vos informations et validez. Vient alors l'étape du paiement. La réservation sera effective après validation de votre règlement.
                         </p>
                     </AccordionItemPanel>
                 </AccordionItem>

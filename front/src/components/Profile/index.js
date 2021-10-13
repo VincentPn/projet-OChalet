@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
+import { format } from 'date-fns';
+
 import {
   setUserField,
   updateUser,
@@ -117,7 +119,7 @@ const Profile = () => {
         {!admin && (
         <Field
           name="birth_date"
-          value={birth_date}
+          value={birth_date ? format(new Date(birth_date), 'yyyy-MM-dd') : ''}
           type="date"
           placeholder="Date de naissance"
           onChange={changeField}

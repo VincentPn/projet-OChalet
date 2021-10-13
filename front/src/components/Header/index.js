@@ -87,7 +87,7 @@ const Header = ({ logged }) => {
           <Dropdown
             className="header__navigation__link"
             text="Mon compte"
-            options={role === 'user' ? userOptions : adminOptions}
+            options={role !== 'admin' ? userOptions : adminOptions}
             simple
             item
           />

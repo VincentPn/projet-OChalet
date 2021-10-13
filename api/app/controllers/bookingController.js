@@ -59,7 +59,7 @@ const bookingController = {
           const newBooking = await new Booking(bookingData).create();
           const user = await User.findById(id);
           const offer = await Offer.findById(offer_id);
-          
+
           newBooking.reservation_start = dayjs(newBooking.reservation_start).format("DD-MM-YYYY")
           newBooking.reservation_end = dayjs(newBooking.reservation_end).format("DD-MM-YYYY")
           

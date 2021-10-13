@@ -32,8 +32,8 @@ import {
 
 const axiosInstance = axios.create({
   // baseURL: 'http://ochaleto.ddns.net',
-  baseURL: 'http://178.79.168.163:3000',
-  // baseURL: 'http://localhost:3000',
+  baseURL: 'http://178.79.137.198:3000',
+  // baseURL: 'http://localhost:5000',
 });
 
 export default (store) => (next) => async (action) => {
@@ -124,11 +124,10 @@ export default (store) => (next) => async (action) => {
           country,
         },
       } = store.getState();
-      const id = localStorage.getItem('id');
+      // const id = localStorage.getItem('id');
       axiosInstance
         .patch('/user',
           {
-            id,
             firstname,
             lastname,
             email,
@@ -146,8 +145,9 @@ export default (store) => (next) => async (action) => {
           })
         .then(
           (response) => {
+            console.log('USER DATAS', response.data);
             store.dispatch(saveUserData(response.data));
-            window.location = '/profile';
+            // window.location = '/profile';
           },
         )
         .catch(
@@ -304,7 +304,7 @@ export default (store) => (next) => async (action) => {
         .then(
           (response) => {
             console.log(response.data);
-              window.location = '/account/user';
+              // window.location = '/account/user';
           },
         )
         .catch(

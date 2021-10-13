@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import { useHistory } from 'react-router-dom';
+
 import { useDispatch, useSelector  } from 'react-redux';
 
 import {
@@ -78,6 +80,8 @@ export default function Paymentform2() {
     setError(event.error ? event.error.message : '');
   };
 
+  const history = useHistory();
+
   const handleSubmit = async ev => {
     ev.preventDefault();
     setProcessing(true);
@@ -99,6 +103,7 @@ export default function Paymentform2() {
       setProcessing(false);
       setSucceeded(true);
       dispatch(saveBookingDates());
+      history.push('/account/user');
     }
   };
 

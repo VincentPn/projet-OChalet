@@ -29,9 +29,6 @@ const Copyright = () => {
           <div className="card__content__header">
             Benjamin
           </div>
-          <div className="card__content__description">
-            Petit description pour chaque membre de l'équipe.
-          </div>
         </div>
         <div className="card__footer">
           <div className="card__footer__role">
@@ -55,9 +52,6 @@ const Copyright = () => {
           <div className="card__content__header">
             Allison
           </div>
-          <div className="card__content__description">
-            Petit description pour chaque membre de l'équipe.
-          </div>
         </div>
         <div className="card__footer">
           <div className="card__footer__role">
@@ -76,9 +70,6 @@ const Copyright = () => {
         <div className="card__content">
           <div className="card__content__header">
             Jérôme
-          </div>
-          <div className="card__content__description">
-            Petit description pour chaque membre de l'équipe.
           </div>
         </div>
         <div className="card__footer">
@@ -99,9 +90,6 @@ const Copyright = () => {
           <div className="card__content__header">
             Vincent
           </div>
-          <div className="card__content__description">
-            Petit description pour chaque membre de l'équipe.
-          </div>
           </div>
             <div className="card__footer">
               <div className="card__footer__role">
@@ -116,9 +104,6 @@ const Copyright = () => {
             <div className="card__content">
               <div className="card__content__header">
                 Christophe
-              </div>
-              <div className="card__content__description">
-                Petit description pour chaque membre de l'équipe.
               </div>
             </div>
             <div className="card__footer">

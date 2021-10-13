@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { Button, Form, Icon } from 'semantic-ui-react';
 import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
+import { fetchOffer } from '../../actions/offers';
+import { Link, useParams, useHistory } from 'react-router-dom';
 
 import Field from '../Field';
 
@@ -11,12 +12,15 @@ import {
   setUserField,
   saveUserData,
   fetchStripeInfos,
+  fetchUserData,
+  updateUser,
 } from '../../actions/user';
 
 import './bookingform.scss';
 
 const Bookingform = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   const {
     lastname,
@@ -32,13 +36,20 @@ const Bookingform = () => {
 
   const dateRange = useSelector((state) => (state.offers.dateRange));
 
+  const offerSelected = useSelector((state) => (state.offers.offerSelected));
+
   const changeField = (value, name) => {
     dispatch(setUserField(value, name));
   };
 
+  const history = useHistory();
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    dispatch(updateUser());
     dispatch(fetchStripeInfos());
+    dispatch(updateUser());
+    history.push('/booking-payment');
   };
 
   const user = localStorage.getItem('user');
@@ -46,11 +57,17 @@ const Bookingform = () => {
 
   useEffect(
     () => {
+      dispatch(fetchUserData());
       dispatch(saveUserData(parsedUser));
+      dispatch(fetchOffer(id))
     },
     // eslint-disable-next-line
     [],
   );
+
+  const getFinalPrice = (price, tax) => {
+    return price + (price * ( tax / 100 ));
+  }
 
   return (
     <main className="booking">
@@ -124,13 +141,17 @@ const Bookingform = () => {
           <h2 className="booking__title">Vos dates de séjour</h2>
           <p className="booking__form__dates">Du { format(dateRange.startDate, 'dd/MM/yyyy') } au { format(dateRange.endDate, 'dd/MM/yyyy') }</p>
         </div>
+        <div>
+          <h2 className="booking__price">Prix TTC à la semaine</h2>
+          <p className="booking__form__price">{offerSelected ? getFinalPrice(offerSelected.price_ht, offerSelected.tax) : ''} €</p>
+        </div>
         <div className="booking__legals">
           <label htmlFor="CGV">
             <input id="CGV" type="checkbox" name="CGV" />  J'ai lu et j'accepte les <Link to="/cgv">conditions générales de vente</Link>
           </label>
         </div>
         <div className="booking__form__buttons">
-          <Link to="/booking-payment">
+          {/* <Link to="/booking-payment"> */}
             <Button
               className="booking__form__buttons__book"
               color="green"
@@ -138,7 +159,7 @@ const Bookingform = () => {
             >
               <Button.Content visible><Icon name="bookmark" />Réserver</Button.Content>
             </Button>
-          </Link>
+          {/* </Link> */}
         </div>
       </Form>
     </main>

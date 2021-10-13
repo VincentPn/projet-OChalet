@@ -15,7 +15,7 @@ import './backoffice-admin.scss';
 const Admin = () => {
 
   const role = useSelector((state) => state.user.role);
-  if (role === 'user') {
+  if (role !== 'admin') {
     <Redirect to="/account/user" />;
   }
 

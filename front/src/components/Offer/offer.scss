@@ -36,10 +36,10 @@
     justify-content: space-evenly;
     margin: 3rem;
     
-    &__description {
+    &__description, &__price, &__address {
       margin-right: 2rem;
       padding: 2rem;
-      background-color: #f0f8ffa8;
+      background-color: #f0f8ffc8;
       border-radius: .6rem;
 
       & p {
@@ -47,7 +47,7 @@
       }
 
       & table {
-        margin-left: 1.1rem;
+        width: 100%;
         & tr {
           border-bottom: 1px solid #EAEAEA;
           & td {
@@ -76,11 +76,22 @@
 
     }
 
+    &__price, &__address {
+      margin-top: 2rem;
+      width: 100%;
+      h2 {
+        margin-bottom: 1rem;
+      }
+    }
+
     &__calendar{
+      display: flex;
+      flex-direction: column;
       
       &__item {
         border-radius: .6rem;
         box-shadow: 0 0 30px #333;
+        overflow: hidden;
       }
     }
 
@@ -97,6 +108,10 @@
     background-color: rgba(104, 99, 99, 0.137);
   }
 
+  .rdrMonth {
+    width: 100%;
+  }
+
 }
 
 .carousel .control-arrow:before, .carousel.carousel-slider .control-arrow:before {
@@ -107,6 +122,10 @@
   border-left-color: #000;
   border-right-color: #000;
   filter: drop-shadow(0 0 3px #fff)
+}
+
+.carousel.carousel-slider {
+  border-radius: .6rem;
 }
 
 .carousel.carousel-slider .control-arrow.control-next {
@@ -131,8 +150,9 @@
     }
 
     &__calendar {
-      width: 90%;
+      width: 100%;
       display: flex;
+      flex-direction: column;
       justify-content: center;
     }
   }

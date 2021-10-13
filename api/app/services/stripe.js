@@ -40,7 +40,6 @@ module.exports = {
 
       const lastDate = new Date()
       lastDate.setDate(lastDate.getDate() -1)
-      console.log(Math.floor(lastDate / 1000))
       
       const {data} = await stripe.paymentIntents.list({limit: 100 ,created: {lt: Math.floor(lastDate / 1000)}});
       
@@ -50,15 +49,11 @@ module.exports = {
 
       if(!cancelableList.length) return console.log("no payment intent pending");
 
-    
-
       for(const cancelableIntent of cancelableList) {
         await stripe.paymentIntents.cancel(cancelableIntent, {cancellation_reason: "abandoned"});
         
       };
-      console.log("pending payment intent older than 24 deleted");
       
-
     } catch (error) {
       console.log(error.message);
     }

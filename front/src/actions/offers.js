@@ -167,3 +167,11 @@ export const setBookings = (bookings) => (
     bookings,
   }
 );
+
+export const TOGGLE_LOADER = 'TOGGLE_LOADER';
+
+export const toggleLoader = () => (
+  {
+    type: TOGGLE_LOADER,
+  }
+);

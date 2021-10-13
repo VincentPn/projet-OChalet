@@ -1,6 +1,6 @@
 const {User, Comment, Message, Booking} = require('../models');
 const bcrypt = require('bcrypt')
-const dayjs = require("dayjs")
+const dayjs = require('dayjs')
 
 const userController = {
 
@@ -21,8 +21,8 @@ const userController = {
     findById: async (request, response) => {
         try {
             const user = await User.findById(request.token.id, 10);
-            delete user.password
-            for(const key in user) !user[key] ? delete user[key] : null
+            delete user.password;
+            for(const key in user) !user[key] ? delete user[key] : null;
             if(user.birth_date) user.birth_date = dayjs(user.birth_date).format('YYYY-MM-DD');
 
             response.json(user);
@@ -49,7 +49,6 @@ const userController = {
             }
 
             await user.update();
-            
             delete user.password;
             for(const key in user) !user[key] ? delete user[key] : null;
             if(user.birth_date) user.birth_date = dayjs(user.birth_date).format('YYYY-MM-DD');
