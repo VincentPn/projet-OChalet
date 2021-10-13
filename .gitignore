@@ -12,7 +12,6 @@ sqitch.conf
 .env
 .env_postgres
 .env_api
-/api/app/uploads/
 
 # testing
 coverage

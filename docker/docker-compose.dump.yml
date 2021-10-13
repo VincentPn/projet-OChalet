@@ -8,6 +8,8 @@ services:
       command: " tail -f /dev/null"
       volumes:
         - db_dump:/home/
+      ports:
+        - 3500:3500
    
 networks:
   my-network:

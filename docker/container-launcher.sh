@@ -12,7 +12,7 @@ DB_PORT="5432"
 DB_NAME="ochalet"
 
 PATH_TO_REPO="../../"
-REPO_NAME="linode-api"
+REPO_NAME="linode-test"
 
 PATH_TO_MAIN_COMPOSE_FILE="./docker-compose.main.yml"
 PATH_TO_DEBIAN_COMPOSE_FILE="./docker-compose.debian.yml"
