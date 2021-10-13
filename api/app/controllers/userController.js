@@ -22,7 +22,7 @@ const userController = {
             const user = await User.findById(request.token.id, 10);
             delete user.password
             for(const key in user) !user[key] ? delete user[key] : null
-            if(user.birth_date) user.birth_date = dayjs(user.birth_date).format('YYYY-MM-DD')
+            if(user.birth_date) user.birth_date = dayjs(user.birth_date).format('DD-MM-YYYY');
 
             response.json(user);
         } catch(error) {
@@ -48,7 +48,10 @@ const userController = {
             }
 
             await user.update();
-         
+            
+            delete user.password;
+            for(const key in user) !user[key] ? delete user[key] : null;
+            if(user.birth_date) user.birth_date = dayjs(user.birth_date).format('DD-MM-YYYY');
             response.json(user);
 
         } catch (error) {
