@@ -6,48 +6,45 @@ red_text=`tput setaf 1`
 reset_color=`tput sgr0`
 
 # REQUIERED VARIABLES
-DB_USERNAME="exemple"
-DB_PASSWORD="exemple"
+DB_USERNAME="ochalet"
+DB_PASSWORD="ochalet"
 DB_PORT="5432"
-DB_NAME="exemple"
+DB_NAME="ochalet"
 
-PATH_TO_REPO="/exemple/exemple/"
-REPO_NAME="exemple"
+PATH_TO_REPO="../../"
+REPO_NAME="linode-api"
 
-PATH_TO_MAIN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.main.yml"
-PATH_TO_DEBIAN_COMPOSE_FILE="$PATH_TO_REPO$REPO_NAME/docker/docker-compose.debian.yml"
+PATH_TO_MAIN_COMPOSE_FILE="./docker-compose.main.yml"
+PATH_TO_DEBIAN_COMPOSE_FILE="./docker-compose.debian.yml"
 
 #OPTIONAL VARIABLES
 ENABLE_OPTIONAL_MODULES="true"
 
 ## db dump and send to another server via ssh for backup
-ENABLE_BACKUP_SSH="true"
+ENABLE_BACKUP_SSH="false"
 BACKUP_SERVER_SSH="exemple"
 BACKUP_SERVER_SSH_PORT="exemple"
 PATH_ON_BACKUP_SERVER="exemple"
 
 
 ## setup cronjob for periodical dump
-ENABLE_DUMP_CRON="true"
+ENABLE_DUMP_CRON="false"
 CRONJOB="*/1 * * * *"
 DELETE_OLDER_THAN_DAYS=5
 
 ## use sqitch for db structure
 ENABLE_SQITCH="true"
 PATH_TO_SQITCH_FOLDER="$PATH_TO_REPO$REPO_NAME/api/migrations"
-# if you have seeding file
-PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/seeding.sql"
 
 ## seeding database
 ENABLE_SEEDING="true"
 PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/seeding.sql"
 
-
-
 #NOT TOUCH THIS VARIABLE
 DB_URI="$DB_USERNAME:$DB_PASSWORD@postgres:$DB_PORT/$DB_NAME"
 
 #-------------------------------------------------------------------------------------------------------------------#
+#Config file confirmation before run
 while true; do
     read -p "Have you completed the conf file ? y/n " yn
     case $yn in
@@ -57,6 +54,8 @@ while true; do
     esac
 done
 
+#-------------------------------------------------------------------------------------------------------------
+# Populating .env files for compose files
 touch .env_postgres
 echo " " >> .env_postgres
 sed -i "1c POSTGRES_USER=$DB_USERNAME" .env_postgres
@@ -64,7 +63,6 @@ echo " " >> .env_postgres
 sed -i "2c POSTGRES_PASSWORD=$DB_PASSWORD" .env_postgres
 echo " " >> .env_postgres
 sed -i "3c POSTGRES_DB=$DB_NAME" .env_postgres
-
 
 touch .env_api
 echo " " >> .env_api
@@ -74,7 +72,8 @@ sed -i "2c REDIS_TLS_URL=redis://redis:6379" .env_api
 echo " " >> .env_api
 sed -i "3c NODE_ENV=docker" .env_api
 
-
+#-------------------------------------------------------------------------------------------------------------
+# Enabling or not optionnal modules, if not the debian container compose file not be used
 case $ENABLE_OPTIONAL_MODULES in
 
   [tT]* | [yY]*) docker-compose -p $REPO_NAME -f $PATH_TO_DEBIAN_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
@@ -82,6 +81,7 @@ case $ENABLE_OPTIONAL_MODULES in
   [fF]* | "" | [nN]*) docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
 esac
 
+#------------------------------------------------------------------------------------------------------------
 # SETUP SQITCH TO DEPLOY DATABASE STRUCTURE
 case $ENABLE_SQITCH in
 
@@ -105,6 +105,7 @@ case $ENABLE_SQITCH in
   [fF]* | [nN]* | "") break;;
 esac
 
+#------------------------------------------------------------------------------------------------------------
 # SETUP SEEDING IN DATABASE
 case $ENABLE_SEEDING in
 [tT]* | [yY]*)
@@ -135,6 +136,7 @@ case $ENABLE_SEEDING in
 [fF]* | [nN]* | "") break;;
 esac
 
+#---------------------------------------------------------------------------------------------------------------
 # SETUP CRONJOB FOR PERIODICALY DUMP OF DATABASE
 case $ENABLE_DUMP_CRON in
 
@@ -157,6 +159,7 @@ case $ENABLE_DUMP_CRON in
   [fF]* | [nN]* | "") break;;
 esac
 
+#---------------------------------------------------------------------------------------------------------------
 # SEND DUMPED DATABASE BACKUP FILES OVER SSH
 case $ENABLE_BACKUP_SSH in
 
@@ -200,6 +203,8 @@ case $ENABLE_BACKUP_SSH in
   [fF]* | [nN]* | "") break;;
 esac
 
+#------------------------------------------------------------------------------#
+#UNPOPULATING FILES AFTER SCRIPT RUN
 
 sed -i '1c BACKUP_SERVER_SSH=' modules/ssh1.sh
 sed -i '2c PATH_ON_BACKUP_SERVER=' modules/ssh1.sh
@@ -223,8 +228,43 @@ sed -i '4c PATH_TO_SEEDING_FILE=' modules/sqitch.sh
 sed -i '5c DB_URI=' modules/sqitch.sh
 
 
+#--------------------------------------------------------------------------------------------------#
 
+Setup iptables rules for cloud vm to accept only authorized port incoming and outgoing
 
+#Flush
+iptables -F INPUT
+iptables -F OUTPUT
 
+#Policies
+iptables -P OUTPUT DROP
+iptables -P INPUT DROP
 
+#Authorize DNS port
+iptables -A INPUT -p tcp --dport 53 -j ACCEPT
+iptables -A INPUT -p udp --dport 53 -j ACCEPT
+
+#Authorize loopback
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+#Authorize established connections
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+#Authorize connections (outgoing and incoming) for this ip => must be fix ip or domain name.
+iptables -A INPUT -s rpiweb.hopto.org -j ACCEPT
+iptables -A OUTPUT -s rpiweb.hopto.org -j ACCEPT
+iptables -A FORWARD -s rpiweb.hopto.org -j ACCEPT
+
+#Incoming authorized ports
+iptables -A INPUT -p udp --dport 2525 -j ACCEPT #mailtrap
+iptables -A INPUT -p tcp --dport 2525 -j ACCEPT #mailtrap
+iptables -A INPUT -p tcp --dport 3000 -j ACCEPT #API
+
+#Outgoing authorized ports
+iptables -A OUTPUT -p udp --dport 2525 -j ACCEPT #mailtrap
+iptables -A OUTPUT -p tcp --dport 2525 -j ACCEPT #mailtrap
+iptables -A OUTPUT -p tcp --dport 3000 -j ACCEPT #API
+ 
 
