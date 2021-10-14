@@ -5,9 +5,9 @@ module.exports = {
   createPaymentIntent: async (obj) => {
     
     try {
-      const tax = Number(`1.${obj.tax}`)
+      const price = obj.tax / 100 + 1
       return await stripe.paymentIntents.create({
-        amount: obj.price_ht * tax * 100,
+        amount: Math.floor(obj.price_ht * tax * 100),
         currency: 'eur',
         description: obj.title,
         statement_descriptor: 'ochalet',
