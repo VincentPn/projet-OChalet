@@ -23,6 +23,9 @@ services:
       env_file:
         - ../environnement/.env_api
       restart: unless-stopped
+      ports:
+        - 3000:3000
+        - 3001:3001
         
       
     
