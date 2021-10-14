@@ -32,7 +32,7 @@ import {
 
 const axiosInstance = axios.create({
   // baseURL: 'http://ochaleto.ddns.net',
-  baseURL: 'http://178.79.168.163:3000',
+  baseURL: 'http://ochalet.hopto.org:3000',
   // baseURL: 'http://localhost:5000',
 });
 
