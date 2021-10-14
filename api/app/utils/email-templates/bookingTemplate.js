@@ -106,7 +106,7 @@ module.exports = (user, booking, offer) => {
             <td>${booking.id}</td>
             <td>${booking.reservation_start} au ${booking.reservation_end}</td>
             <td>${offer.title}</td>
-            <td>${offer.price_ht * (offer.tax / 100 + 1)}€</td>
+            <td>${Math.floor(offer.price_ht * (offer.tax / 100 + 1))}€</td>
           </tr>
         </tbody>
       </table>
