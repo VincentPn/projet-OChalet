@@ -58,10 +58,13 @@ module.exports = async (request, response, next) => {
                 const check = url.split('/')[1];
                 if(key.includes(check)) return true;
                 if(check.includes("signup") && key.includes("admin/user") ) return true;
+                if(check.includes("offer") && key.includes("booking")) return true;
               }
               else {
                 const check = url.split('/')[2];
                 if(key.includes(check)) return true;
+                if(check.includes("signup") && key.includes("admin/user") ) return true;
+                if(check.includes("offer") && key.includes("booking")) return true;
               }
             });
            
