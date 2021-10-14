@@ -23,16 +23,16 @@ PATH_TO_FRONT_COMPOSE_FILE="./deployement/docker-compose.front.yml"
 ENABLE_OPTIONAL_MODULES="true"
 
 ## db dump and send to another server via ssh for backup
-ENABLE_BACKUP_SSH="false"
-BACKUP_SERVER_SSH="pi@rpiweb.hopto.org"
+ENABLE_BACKUP_SSH="true"
+BACKUP_SERVER_SSH="root@rpiweb.hopto.org"
 BACKUP_SERVER_SSH_PORT="3500"
-PATH_ON_BACKUP_SERVER="/home/pi/ochalet_dump/"
+PATH_ON_BACKUP_SERVER="/root/ochalet_dump/"
 
 
 ## setup cronjob for periodical dump
-ENABLE_DUMP_CRON="false"
-CRONJOB="*/1 * * * *"
-DELETE_OLDER_THAN_DAYS=5
+ENABLE_DUMP_CRON="true"
+CRONJOB="0 2 * * *"
+DELETE_OLDER_THAN_DAYS=3
 
 ## use sqitch for db structure
 ENABLE_SQITCH="false"
@@ -58,7 +58,7 @@ sed -i "1c docker stop api && docker rm api && docker image rm api:v1.0.0" api-s
 
 touch api-rebuilder.sh
 echo " " >> api-rebuilder.sh
-sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE up -d" api-rebuilder.sh
+sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_FRONT_COMPOSE_FILE -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE up -d" api-rebuilder.sh
 
 touch front-stopper.sh
 echo " " >> front-stopper.sh

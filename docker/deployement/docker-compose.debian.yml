@@ -8,6 +8,8 @@ services:
       command: " tail -f /dev/null"
       volumes:
         - db_dump:/
+      depends_on:
+        - postgres
    
 networks:
   my-network:
