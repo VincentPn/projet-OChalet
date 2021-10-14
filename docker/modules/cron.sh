@@ -6,7 +6,7 @@ DELETE_OLDER_THAN_DAYS=
 
 touch dump.sh
 echo " " >> dump.sh
-sed -i '1c DATE=$(date +%F-%H:%M)' dump.sh
+sed -i '1c DATE=$(date +%F-%H_%M)' dump.sh
 echo " " >> dump.sh
 sed -i "2c pg_dump postgres://$DB_URI > /home/postgres\$DATE.sql" dump.sh
 echo "find /home/ -type f -ctime +$DELETE_OLDER_THAN_DAYS -execdir rm -- '{}' \;" >> dump.sh

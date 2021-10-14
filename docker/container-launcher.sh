@@ -208,7 +208,7 @@ case $ENABLE_BACKUP_SSH in
             read -p "Type yes when key is copied or no to abort this script ? y/n " yn
             case $yn in
                 [Yy]* ) break;;
-                [Nn]* ) docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE down -v  
+                [Nn]* ) docker-compose -p $REPO_NAME -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE down -v  
                 exit;;
             * ) echo "Please answer yes or no.";;
             esac
