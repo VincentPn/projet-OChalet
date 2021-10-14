@@ -92,9 +92,9 @@ sed -i "3c POSTGRES_DB=$DB_NAME" ./environnement/.env_postgres
 
 touch ./environnement/.env_api
 echo " " >> ./environnement/.env_api
-sed -i "1c DATABASE_URL=postgres://$DB_URI" .env_api
+sed -i "1c DATABASE_URL=postgres://$DB_URI" ./environnement/.env_api
 echo " " >> ./environnement/.env_api
-sed -i "2c REDIS_TLS_URL=redis://redis:6379" .env_api
+sed -i "2c REDIS_TLS_URL=redis://redis:6379" ./environnement/.env_api
 echo " " >> ./environnement/.env_api
 sed -i "3c NODE_ENV=docker" ./environnement/.env_api
 
