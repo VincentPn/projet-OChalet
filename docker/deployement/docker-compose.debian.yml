@@ -6,15 +6,9 @@ services:
         - my-network
       image: debian:stable-slim
       command: " tail -f /dev/null"
-      volumes:
-        - db_dump:/
       depends_on:
         - postgres
    
 networks:
   my-network:
     name: my-network
-
-volumes:
-  db_dump:
-    name: db_dump
