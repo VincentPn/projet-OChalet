@@ -23,7 +23,8 @@ const paymentController = {
       response.json({ clientSecret: client_secret });
 
     } catch(error) {
-        response.status(500).send(error.message);
+        console.log(error.message, error)
+        response.status(400).send(error.message);
     }
 },
 
