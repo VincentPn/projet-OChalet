@@ -15,7 +15,7 @@ services:
         - my-network
       build: ../../api/
       image: api:v1.0.0
-      hotsname: api
+      hostname: api
       command: run start
       depends_on:
         - redis
