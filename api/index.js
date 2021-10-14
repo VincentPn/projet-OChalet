@@ -13,7 +13,7 @@ const port = process.env.PORT || 5000
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-app.use(cors());
+app.use(cors({origin: 'http://ochalet.hopto.org'}));
 
 const limiter = rateLimit({ windowMs: 10 * 60 * 1000, max: 100 });
 app.use(limiter);
