@@ -27,7 +27,7 @@ const userController = {
 
             response.json(user);
         } catch(error) {
-          console.log(error)
+          console.log(error.message)
             response.status(500).send(error.message);
         }
         

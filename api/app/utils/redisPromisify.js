@@ -1,5 +1,6 @@
 const db = require('../databases/redis');
 
+
 const {promisify} = require('util');
 
 module.exports = {
@@ -7,5 +8,6 @@ module.exports = {
     set: promisify(db.set).bind(db),
     setex: promisify(db.setex).bind(db),
     del: promisify(db.del).bind(db),
-    exists: promisify(db.exists).bind(db)
+    exists: promisify(db.exists).bind(db),
+    incr: promisify(db.incr).bind(db)
 };

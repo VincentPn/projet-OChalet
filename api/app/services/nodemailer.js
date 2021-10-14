@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify(function (error, success) {
   if (error) {
-    console.log(error);
+    console.log(error.message);
   } else {
     console.log("nodemailer connected to mailtrap");
   }

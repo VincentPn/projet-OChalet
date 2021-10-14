@@ -30,7 +30,7 @@ module.exports = {
             { expiresIn: '5d', algorithm: 'HS256' }
           );
         } catch (error) {
-          console.log(error);
+          console.log(error.message);
           throw error;
         }
     },

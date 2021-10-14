@@ -18,7 +18,6 @@ module.exports = {
         if(error) throw error;
       });
       if(!url) throw new Error('Cloudinary upload error');
-      console.log(url);
       request.body.main_picture = url;
       
       const optionalPictures = Object.keys(request.body)
@@ -35,7 +34,6 @@ module.exports = {
           if(error) throw error;
         });
         if(!url) throw new Error('Cloudinary upload error');
-        console.log(url);
         request.body[picture] = url;
     
       };

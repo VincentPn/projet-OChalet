@@ -16,7 +16,6 @@ module.exports = async (req, res, next) => {
 
         if(!urlSchemaMatch.length) return res.status(400).send("no schema match");
 
-        console.log("validator activated");
         
         req[dataLocation] = await validate(req[dataLocation], urlSchemaMatch, req.method);
         

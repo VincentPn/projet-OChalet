@@ -22,4 +22,6 @@ client.on("error", (error) => {
     console.log(error)
 });
 
+client.inc
+
 module.exports = client

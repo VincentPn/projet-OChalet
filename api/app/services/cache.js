@@ -10,7 +10,7 @@ const keys = [];
 module.exports = async (request, response, next) => {
   
     try {
-        console.log('actual cached keys', keys);
+        
         if(request.method === "GET"){
           
           let key;
@@ -25,7 +25,7 @@ module.exports = async (request, response, next) => {
           
           if (keys.includes(key) && await asyncClient.exists(key)) {
               const value =  JSON.parse(await asyncClient.get(key));
-              console.log('cached response');
+              
               response.json(value);
           } 
           else if(request.url.includes('refresh')) return next()
@@ -40,8 +40,6 @@ module.exports = async (request, response, next) => {
                   await asyncClient.setex(key, TIMEOUT, stringifyedData);
 
                   keys.push(key);
-
-                  console.log("modified json");
 
                   originalJson(data);        
               }
@@ -69,8 +67,6 @@ module.exports = async (request, response, next) => {
             });
            
             if(!cachedKeys.length) return next();
-
-            console.log('Removing keys', cachedKeys);
 
             await asyncClient.del(cachedKeys);
             
