@@ -66,7 +66,7 @@ sed -i "1c docker stop front && docker rm front && docker image rm front:v1.0.0"
 
 touch front-rebuilder.sh
 echo " " >> front-rebuilder.sh
-sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_FRONT_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE up -d" front-rebuilder.sh
+sed -i "1c docker-compose -p $REPO_NAME -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_FRONT_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE up -d" front-rebuilder.sh
 
 
 
