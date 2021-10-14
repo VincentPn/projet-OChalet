@@ -24,8 +24,8 @@ ENABLE_OPTIONAL_MODULES="true"
 
 ## db dump and send to another server via ssh for backup
 ENABLE_BACKUP_SSH="false"
-BACKUP_SERVER_SSH="rpiweb.hopto.org"
-BACKUP_SERVER_SSH_PORT="26"
+BACKUP_SERVER_SSH="pi@rpiweb.hopto.org"
+BACKUP_SERVER_SSH_PORT="3500"
 PATH_ON_BACKUP_SERVER="/home/pi/ochalet_dump/"
 
 
@@ -35,12 +35,12 @@ CRONJOB="*/1 * * * *"
 DELETE_OLDER_THAN_DAYS=5
 
 ## use sqitch for db structure
-ENABLE_SQITCH="true"
+ENABLE_SQITCH="false"
 PATH_TO_SQITCH_FOLDER="$PATH_TO_REPO$REPO_NAME/api/migrations"
 
 ## seeding database
 ENABLE_SEEDING="true"
-PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/seeding.sql"
+PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/seeding.sql"
 
 #NOT TOUCH THIS VARIABLE
 DB_URI="$DB_USERNAME:$DB_PASSWORD@postgres:$DB_PORT/$DB_NAME"
