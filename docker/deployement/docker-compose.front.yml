@@ -8,7 +8,6 @@ services:
         - my-network
       ports:
         - 80:80
-        - 5000:443
       restart: unless-stopped
       depends_on:
         - redis
