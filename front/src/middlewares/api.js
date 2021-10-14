@@ -31,8 +31,8 @@ import {
 } from '../actions/user';
 
 const axiosInstance = axios.create({
-  // baseURL: 'http://ochaleto.ddns.net',
   baseURL: 'http://ochalet.hopto.org:3000',
+  // baseURL: 'http://178.79.137.198:3000',
   // baseURL: 'http://localhost:5000',
 });
 
@@ -47,6 +47,7 @@ export default (store) => (next) => async (action) => {
         })
         .then(
           (response) => {
+            console.log(response.data);
             const token = response.data.accessToken;
             const decoded = jwt_decode(token);
             store.dispatch(saveUserData(response.data.user));

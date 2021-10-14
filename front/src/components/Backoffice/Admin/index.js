@@ -58,7 +58,9 @@ const Admin = () => {
         {
           offers.map((offer) => (
             <div key={offer.id} className="backoffice-admin__card">
-              <img src={offer.main_picture} alt="mountain" className="backoffice-admin__card__image" />
+              <div className="backoffice-admin__card__image">
+                <img src={offer.main_picture} alt="mountain" />
+              </div>
               <div className="backoffice-admin__card__details">
                 <h2 className="backoffice-admin__card__details__name">{offer.title}</h2>
                 <p className="backoffice-admin__card__details__city">{offer.city_name}, {offer.country}</p>

@@ -6,7 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
-import { connectUser } from '../../actions/user';
+import { connectUser, fetchUserData } from '../../actions/user';
 import { fetchLocations, fetchOffers } from '../../actions/offers';
 
 import 'semantic-ui-css/semantic.min.css';
@@ -63,6 +63,13 @@ const App = () => {
   useEffect(
     () => {
       dispatch(fetchOffers());
+    },
+    [],
+  );
+
+  useEffect(
+    () => {
+      dispatch(fetchUserData());
     },
     [],
   );

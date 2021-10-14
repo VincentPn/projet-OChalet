@@ -12,11 +12,11 @@
     
 
     &__card{
+      position: relative;
       display: flex;
       flex-direction: column;
       margin: 2rem;
-      width: 28%;
-      min-width: 300px;
+      width: 300px;
       border-radius: .6rem;
       overflow: hidden;
       background-color: #f0f8ffa8;
@@ -28,21 +28,33 @@
         transform: scale(1.03);
 
         & .offers__card__title {
-          color: #a5673f;
+          color: #dc9160;
           text-shadow: none;
         }
       }
     
-      &__image{
+      &__image {
+        display: flex;
+        align-items: center;
         width: 100%;
+        height: 200px;
+        overflow: hidden;
+
+        & img {
+          width: 100%;
+        }
       }
   
       &__title{
+        width: 100%;
         position: absolute;
+        bottom: 0px;
+        left: 0;
         color: #EAEAEA;
+        background-color: rgba(51, 51, 51, 0.509);
         text-shadow: 0 0 2px #000;
         font-size: 1.8rem;
-        padding: 0 1rem ;
+        padding: .6rem;
         font-family: 'Patrick Hand', cursive;
       }
   

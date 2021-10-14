@@ -10,6 +10,7 @@ import './header.scss';
 
 const Header = ({ logged }) => {
   const role = useSelector((state) => state.user.role);
+  // const role = localStorage.getItem('role');
 
   const adminOptions = [
     {
@@ -34,6 +35,18 @@ const Header = ({ logged }) => {
       key: 3, text: 'Déconnexion', as: Link, to: '/signout', value: 3,
     },
   ];
+
+  let options = adminOptions;
+
+  const testRole = () => {
+    if (role === 'admin'){
+      options = adminOptions;
+      return options;
+    } else {
+      options = userOptions;
+      return options;
+    }
+  };
 
   return (
 
@@ -87,7 +100,7 @@ const Header = ({ logged }) => {
           <Dropdown
             className="header__navigation__link"
             text="Mon compte"
-            options={role !== 'admin' ? userOptions : adminOptions}
+            options={testRole()}
             simple
             item
           />

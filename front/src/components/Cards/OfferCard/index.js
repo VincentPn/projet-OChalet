@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 const OfferCard = ({ title, main_picture, id }) => (
 
   <Link className="offers__card" to={`/offers/${id}`}>
-    <img src={main_picture} alt="mountain" className="offers__card__image" />
+    <div className="offers__card__image">
+      <img src={main_picture} alt="mountain" />
+    </div>
     <h2 className="offers__card__title">{title}</h2>
   </Link>
 );

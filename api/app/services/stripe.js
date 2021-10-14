@@ -10,7 +10,7 @@ module.exports = {
         amount: obj.price_ht * tax * 100,
         currency: 'eur',
         description: obj.title,
-        statement_descriptor: `Ochalet-${obj.title}`.substr(0,22),
+        statement_descriptor: 'ochalet',
         metadata: {
           offer_id: obj.id,
           booking_start: obj.booking_start,

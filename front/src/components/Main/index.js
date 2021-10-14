@@ -4,6 +4,7 @@ import { Button, Icon } from 'semantic-ui-react';
 import './main.scss';
 
 const Main = () => (
+
   <main className="main">
     <p className="main__text">Vous vous sentez stressé.e ? Fatigué.e ? Vous avez sûrement besoin de changer d'air...</p>
     <Link to="/locations" className="main__link">
@@ -12,6 +13,7 @@ const Main = () => (
       </Button>
     </Link>
   </main>
+
 );
 
 export default Main;
