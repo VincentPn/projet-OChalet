@@ -40,7 +40,8 @@ PATH_TO_SQITCH_FOLDER="$PATH_TO_REPO$REPO_NAME/api/migrations"
 
 ## seeding database
 ENABLE_SEEDING="true"
-PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/postgres2021-10-14-19:47.sql"
+PATH_TO_SEEDING_FILE="$PATH_TO_REPO$REPO_NAME/api/data/"
+SEEDING_FILE_NAME="postgres2021-10-14-19:47.sql"
 
 #NOT TOUCH THIS VARIABLE
 DB_URI="$DB_USERNAME:$DB_PASSWORD@postgres:$DB_PORT/$DB_NAME"
@@ -143,7 +144,8 @@ case $ENABLE_SEEDING in
         [tT]* | [yY]*)
 
             sed -i "1c PATH_TO_SEEDING_FILE=\"$PATH_TO_SEEDING_FILE\"" modules/seeding.sh
-            sed -i "2c DB_URI=\"$DB_URI\"" modules/seeding.sh
+            sed -i "2c SEEDING_FILE_NAME=\"$SEEDING_FILE_NAME\"" modules/seeding.sh
+            sed -i "3c DB_URI=\"$DB_URI\"" modules/seeding.sh
             sh modules/seeding.sh
             ;;
         
