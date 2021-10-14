@@ -10,8 +10,7 @@ sqitch.conf
 .pnp
 .pnp.js
 .env
-.env_postgres
-.env_api
+
 
 # testing
 coverage

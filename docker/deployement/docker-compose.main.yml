@@ -9,32 +9,18 @@ services:
         - redis_data:/data
       restart: unless-stopped
 
-    postgres:
-      container_name: postgres
-      hostname: postgres
-      networks:
-        - my-network
-      image: postgres:13.4-alpine
-      env_file:
-        - .env_postgres
-      volumes:
-        - db_data:/var/lib/postgresql/data
-      restart: unless-stopped
-
     api:
       container_name: api
       networks:
         - my-network
-      build: ../api/
+      build: ../../api/
       image: api:v1.0.0
       command: run start
-      ports:
-        - 3000:3000
       depends_on:
         - redis
         - postgres
       env_file:
-        - .env_api
+        - ../environnement/.env_api
       restart: unless-stopped
         
       
@@ -44,8 +30,6 @@ networks:
     name: my-network
 
 volumes:
-  db_data:
-    name: postgres_data
   redis_data:
     name: redis_data
 

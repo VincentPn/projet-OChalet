@@ -14,21 +14,23 @@ DB_NAME="ochalet"
 PATH_TO_REPO="../../"
 REPO_NAME="linode-test"
 
-PATH_TO_MAIN_COMPOSE_FILE="./docker-compose.main.yml"
-PATH_TO_DEBIAN_COMPOSE_FILE="./docker-compose.debian.yml"
+PATH_TO_MAIN_COMPOSE_FILE="./deployement/docker-compose.main.yml"
+PATH_TO_DEBIAN_COMPOSE_FILE="./deployement/docker-compose.debian.yml"
+PATH_TO_DATABASE_COMPOSE_FILE="./deployement/docker-compose.database.yml"
+PATH_TO_FRONT_COMPOSE_FILE="./deployement/docker-compose.front.yml"
 
 #OPTIONAL VARIABLES
 ENABLE_OPTIONAL_MODULES="true"
 
 ## db dump and send to another server via ssh for backup
-ENABLE_BACKUP_SSH="true"
+ENABLE_BACKUP_SSH="false"
 BACKUP_SERVER_SSH="rpiweb.hopto.org"
 BACKUP_SERVER_SSH_PORT="26"
 PATH_ON_BACKUP_SERVER="/home/pi/ochalet_dump/"
 
 
 ## setup cronjob for periodical dump
-ENABLE_DUMP_CRON="true"
+ENABLE_DUMP_CRON="false"
 CRONJOB="*/1 * * * *"
 DELETE_OLDER_THAN_DAYS=5
 
@@ -73,29 +75,29 @@ done
 
 #-------------------------------------------------------------------------------------------------------------
 # Populating .env files for compose files
-touch .env_postgres
+touch ./environnement/.env_postgres
+echo " " >> ./environnement/.env_postgres
+sed -i "1c POSTGRES_USER=$DB_USERNAME" ./environnement/.env_postgres
 echo " " >> .env_postgres
-sed -i "1c POSTGRES_USER=$DB_USERNAME" .env_postgres
+sed -i "2c POSTGRES_PASSWORD=$DB_PASSWORD" ./environnement/.env_postgres
 echo " " >> .env_postgres
-sed -i "2c POSTGRES_PASSWORD=$DB_PASSWORD" .env_postgres
-echo " " >> .env_postgres
-sed -i "3c POSTGRES_DB=$DB_NAME" .env_postgres
+sed -i "3c POSTGRES_DB=$DB_NAME" ./environnement/.env_postgres
 
-touch .env_api
-echo " " >> .env_api
+touch ./environnement/.env_api
+echo " " >> ./environnement/.env_api
 sed -i "1c DATABASE_URL=postgres://$DB_URI" .env_api
-echo " " >> .env_api
+echo " " >> ./environnement/.env_api
 sed -i "2c REDIS_TLS_URL=redis://redis:6379" .env_api
-echo " " >> .env_api
-sed -i "3c NODE_ENV=docker" .env_api
+echo " " >> ./environnement/.env_api
+sed -i "3c NODE_ENV=docker" ./environnement/.env_api
 
 #-------------------------------------------------------------------------------------------------------------
 # Enabling or not optionnal modules, if not the debian container compose file not be used
 case $ENABLE_OPTIONAL_MODULES in
 
-  [tT]* | [yY]*) docker-compose -p $REPO_NAME -f $PATH_TO_DEBIAN_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
+  [tT]* | [yY]*) docker-compose -p $REPO_NAME -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
 
-  [fF]* | "" | [nN]*) docker-compose -p $REPO_NAME -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
+  [fF]* | "" | [nN]*) docker-compose -p $REPO_NAME -f $PATH_TO_FRONT_COMPOSE_FILE -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
 esac
 
 #------------------------------------------------------------------------------------------------------------

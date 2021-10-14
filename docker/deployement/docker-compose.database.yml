@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+
+    postgres:
+      container_name: postgres
+      hostname: postgres
+      networks:
+        - my-network
+      image: postgres:13.4-alpine
+      env_file:
+        - ../environnement/.env_postgres
+      volumes:
+        - db_data:/var/lib/postgresql/data
+      restart: unless-stopped
+      
+    
+networks:
+  my-network:
+    name: my-network
+
+volumes:
+  db_data:
+    name: postgres_data
+
+
+        
+
