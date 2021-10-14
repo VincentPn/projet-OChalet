@@ -11,6 +11,10 @@ sqitch.conf
 .pnp.js
 .env
 
+/docker/api*
+/docker/front*
+/docker/container-stopper.sh
+
 
 # testing
 coverage

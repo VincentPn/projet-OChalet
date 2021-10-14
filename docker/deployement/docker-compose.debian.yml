@@ -7,7 +7,7 @@ services:
       image: debian:stable-slim
       command: " tail -f /dev/null"
       volumes:
-        - db_dump:/home/
+        - db_dump:/
    
 networks:
   my-network:

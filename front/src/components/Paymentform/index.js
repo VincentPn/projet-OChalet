@@ -100,10 +100,14 @@ export default function Paymentform2() {
       setProcessing(false);
     } else {
       setError(null);
-      setProcessing(false);
+      
       setSucceeded(true);
       dispatch(saveBookingDates());
-      history.push('/account/user');
+      setTimeout(() => {
+        history.push('/account/user');
+        setProcessing(false);
+      }, 3000);
+      
     }
   };
 

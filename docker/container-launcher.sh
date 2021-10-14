@@ -85,9 +85,9 @@ done
 touch ./environnement/.env_postgres
 echo " " >> ./environnement/.env_postgres
 sed -i "1c POSTGRES_USER=$DB_USERNAME" ./environnement/.env_postgres
-echo " " >> .env_postgres
+echo " " >> ./environnement/.env_postgres
 sed -i "2c POSTGRES_PASSWORD=$DB_PASSWORD" ./environnement/.env_postgres
-echo " " >> .env_postgres
+echo " " >> ./environnement/.env_postgres
 sed -i "3c POSTGRES_DB=$DB_NAME" ./environnement/.env_postgres
 
 touch ./environnement/.env_api
