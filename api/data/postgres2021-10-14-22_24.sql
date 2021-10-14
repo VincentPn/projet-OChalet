@@ -979,6 +979,8 @@ COPY public.booking (id, reservation_start, reservation_end, reservation_status,
 38	2022-03-11 23:00:00+00	2022-03-18 23:00:00+00	f	\N	2	14
 39	2021-10-13 22:00:00+00	2021-10-20 22:00:00+00	f	\N	8	7
 40	2021-11-12 23:00:00+00	2021-11-19 23:00:00+00	f	\N	17	13
+41	2021-11-05 23:00:00+00	2021-11-12 23:00:00+00	f	\N	17	11
+42	2021-10-22 22:00:00+00	2021-10-29 22:00:00+00	f	\N	17	15
 \.
 
 
@@ -1000,7 +1002,7 @@ COPY public.location (id, name, picture) FROM stdin;
 3	Jura	https://images.unsplash.com/photo-1603445125995-6f47a1bfccf0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2340&q=80
 4	Massif Central	https://images.unsplash.com/photo-1603121494413-0d31fe0bfb1e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2340&q=80
 6	Vosges	https://images.unsplash.com/photo-1604782101560-b1cf32c445a8?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2340&q=80
-5	Pyrenées	https://images.unsplash.com/photo-1538427144912-31de1ccb39f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80
+5	Pyrénées	https://images.unsplash.com/photo-1538427144912-31de1ccb39f2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80
 \.
 
 
@@ -1048,12 +1050,12 @@ COPY public."user" (id, firstname, lastname, email, phone, birth_date, zip_code,
 12	thibault	dupond	ghpduvb@gmail.com	\N	\N	\N	\N	\N	\N	\N	$2b$10$GuGtHamAa2mRo1bdOP/q3exU8MZjpXia3HE9NDxPYVoGatMdUC9hm	user
 8	Vincent	PAYEN	payen.vincent@gmail.com	0102030405	\N	92500	Dev City	Dev Land	rue de l'API	15	$2b$10$.u6jmfUeLZ71L85Owp9BruxcNn2obWwxK/KaAkPzwdyToQMOA3gkW	user
 13	thibault	dupond	dupondj587@gmail.com	0487757575	\N	93250	trouloulou	Afganistan	mohamed	6969	$2b$10$/62v0N3W5y5UnI2lifVJRO4A9ua3HQ5r6R5b14KDH9I3iQNQefdzW	admin
-17	Harry	Co	harry@co.fr	0123456780	1991-07-21 00:00:00+00	13110	Aix en Provence	France	rue des pistes	15	$2b$10$.JSFzsFQBS46AaERtppZDeom65Gz42NpfLqWmEaAeP6ZCmqM8G9hm	user
 9	jerome	kara	jerome@gmail.com	0654842541	\N	75018	Paris	France	rue de la paix	15	$2b$10$17hk.jRPMM45bebnN5dntuZCRZbDJR5LHj1tHFkrvFOmgv5JU9vtq	user
 11	Jean paul	Dupont	jp@dupont.com	0123456789	\N	11001	Frime les Oies	France	llllllfff	11	$2b$10$.Zm78h9KVUCuaIt/EmCNget1.kxcVPTFy6OYTEOFbt9UiHM2nikxG	admin
 14	jerome	karabenli	jkarabenli@gmail.com	0658254580	\N	75018	ffff	france	jdjjd	jfjfjf	$2b$10$6g4KJqBwwp2NYDZUFGpcY.fS6WDt7qKlkVK3CY4EVjzg8aWYvswBW	user
 15	kara	jerome	j@dev.com	\N	\N	\N	\N	\N	\N	\N	$2b$10$SzW1gTXltwnqNkUZo.cljOJZ3SBe3.NNEYKTmyQ7ZTD1Zg/MbJ0yi	user
 16	Lol	Loli	loli@lol.fr	0123456789	\N	13100	Lyon	France	lala	21	$2b$10$HAsh48DJTg4f9vXmicNQq.C6By8oqnAGDsqQ2r3g4fgdmBo.g.kIq	user
+17	Harry	Co	harry@co.fr	0123456780	1991-07-21 00:00:00+00	13110	Aix en Provence	France	rue des pistes	15	$2b$10$.JSFzsFQBS46AaERtppZDeom65Gz42NpfLqWmEaAeP6ZCmqM8G9hm	user
 \.
 
 
@@ -1117,7 +1119,7 @@ COPY sqitch.tags (tag_id, tag, project, change_id, note, committed_at, committer
 -- Name: booking_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ochalet
 --
 
-SELECT pg_catalog.setval('public.booking_id_seq', 40, true);
+SELECT pg_catalog.setval('public.booking_id_seq', 42, true);
 
 
 --
