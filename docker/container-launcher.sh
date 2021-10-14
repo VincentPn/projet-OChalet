@@ -95,7 +95,7 @@ sed -i "3c NODE_ENV=docker" ./environnement/.env_api
 # Enabling or not optionnal modules, if not the debian container compose file not be used
 case $ENABLE_OPTIONAL_MODULES in
 
-  [tT]* | [yY]*) docker-compose -p $REPO_NAME -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
+  [tT]* | [yY]*) docker-compose -p $REPO_NAME -f $PATH_TO_FRONT_COMPOSE_FILE -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_DEBIAN_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
 
   [fF]* | "" | [nN]*) docker-compose -p $REPO_NAME -f $PATH_TO_FRONT_COMPOSE_FILE -f $PATH_TO_DATABASE_COMPOSE_FILE -f $PATH_TO_MAIN_COMPOSE_FILE up -d ;;
 esac
