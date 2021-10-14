@@ -9,6 +9,11 @@ services:
       ports:
         - 80:80
       restart: unless-stopped
+      depends_on:
+        - redis
+        - postgres
+        - api
+        - debian
       
        
 networks:
