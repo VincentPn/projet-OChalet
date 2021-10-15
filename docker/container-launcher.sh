@@ -23,14 +23,14 @@ PATH_TO_FRONT_COMPOSE_FILE="./deployement/docker-compose.front.yml"
 ENABLE_OPTIONAL_MODULES="true"
 
 ## db dump and send to another server via ssh for backup
-ENABLE_BACKUP_SSH="true"
+ENABLE_BACKUP_SSH="false"
 BACKUP_SERVER_SSH="root@rpiweb.hopto.org"
 BACKUP_SERVER_SSH_PORT="3500"
 PATH_ON_BACKUP_SERVER="/root/ochalet_dump/"
 
 
 ## setup cronjob for periodical dump
-ENABLE_DUMP_CRON="true"
+ENABLE_DUMP_CRON="false"
 CRONJOB="0 2 * * *"
 DELETE_OLDER_THAN_DAYS=3
 
