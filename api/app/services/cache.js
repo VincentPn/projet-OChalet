@@ -24,13 +24,14 @@ module.exports = async (request, response, next) => {
           else return next();
           
           if (keys.includes(key) && await asyncClient.exists(key)) {
+              console.log(`Visitor count: ${await asyncClient.incr('visitor')}`)
               const value =  JSON.parse(await asyncClient.get(key));
               
               response.json(value);
           } 
           else if(request.url.includes('refresh')) return next()
           else {
-             
+              console.log(`Visitor count: ${await asyncClient.incr('visitor')}`)
               const originalJson = response.json.bind(response);
 
               response.json = async (data) => {
