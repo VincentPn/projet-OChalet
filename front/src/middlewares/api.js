@@ -31,7 +31,7 @@ import {
 } from '../actions/user';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://ochalet.tk:3000',
+  baseURL: 'https://ochalet.tk:3000',
   // baseURL: 'http://178.79.137.198:3000',
   // baseURL: 'http://localhost:5000',
 });
