@@ -1,6 +1,7 @@
 nginx:
     image: erangaeb/climguards-nginx:0.2
     container_name: nginx
+    build: .
     ports:
       - 80:80
       - 443:443
