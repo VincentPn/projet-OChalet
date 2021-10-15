@@ -151,7 +151,8 @@ case $ENABLE_SEEDING in
         
         [fF]* | "" | [nN]*) 
             sed -i "1c PATH_TO_SEEDING_FILE=\"$PATH_TO_SEEDING_FILE\"" modules/seeding.sh
-            sed -i "2c DB_URI=\"$DB_URI\"" modules/seeding.sh
+            sed -i "2c SEEDING_FILE_NAME=\"$SEEDING_FILE_NAME\"" modules/seeding.sh
+            sed -i "3c DB_URI=\"$DB_URI\"" modules/seeding.sh
             sed -i '4c docker exec -it debian bash -c \"apt-get update && apt-get install postgresql-client -y \"' modules/seeding.sh
             sh modules/seeding.sh
             ;;
