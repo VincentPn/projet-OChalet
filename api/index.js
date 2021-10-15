@@ -6,6 +6,8 @@ const swaggerUI = require("swagger-ui-express");
 const rateLimit = require('express-rate-limit');
 const docs = require('./docs/swagger');
 require('./app/services/scheduledTasks')
+const https = require('https')
+const fs = require("fs")
 
 const app = express();
 const port = process.env.PORT || 5000
@@ -25,9 +27,15 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.use(router);
 
-app.listen(port, () => {
-    console.log(`Server started on http://localhost:${port}\nApi docs available on http://localhost:${port}/api-docs`)
-});
+const certFiles = {
+    key: fs.readFileSync("./ssl/privkey.pem"),
+    cert: fs.readFileSync("./ssl/fullchain.pem")
+  };
+
+  if(HTTPS === "true") https.createServer(certFiles, app).listen(PORT, () => console.log(`HTTPS server up, listen on port: ${PORT}`));
+  else app.listen(PORT, () => console.log(`HTTP server up, listen on port: ${PORT}`));
+
+
 
 
 
