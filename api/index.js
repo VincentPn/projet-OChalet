@@ -10,7 +10,7 @@ const https = require('https')
 const fs = require("fs")
 
 const app = express();
-const port = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -32,7 +32,7 @@ const certFiles = {
     cert: fs.readFileSync("./ssl/fullchain.pem")
   };
 
-  if(HTTPS === "true") https.createServer(certFiles, app).listen(PORT, () => console.log(`HTTPS server up, listen on port: ${PORT}`));
+  if(process.env.HTTPS === "true") https.createServer(certFiles, app).listen(PORT, () => console.log(`HTTPS server up, listen on port: ${PORT}`));
   else app.listen(PORT, () => console.log(`HTTP server up, listen on port: ${PORT}`));
 
 
