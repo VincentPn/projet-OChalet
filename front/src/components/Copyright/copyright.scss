@@ -55,6 +55,16 @@
           font-size: 1.4rem;
           margin-bottom: .6rem;
         }
+
+        &__social {
+          display: flex;
+          justify-content: center;
+
+          & a {
+            z-index: 999;
+            margin: 1rem;
+          }
+        }
       }
 
       &__footer {

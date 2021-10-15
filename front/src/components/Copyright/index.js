@@ -29,6 +29,14 @@ const Copyright = () => {
           <div className="card__content__header">
             Benjamin
           </div>
+          <div className="card__content__social">
+            <a href="https://www.linkedin.com/in/bchoron/" target="_blank" rel="noreferrer noopener">
+              <img src="https://img.icons8.com/ios-glyphs/30/000000/linkedin.png"/>
+            </a>
+            <a href="https://github.com/BenjaminChoron" target="_blank" rel="noreferrer noopener">
+              <img src="https://img.icons8.com/ios-glyphs/30/000000/github.png"/>
+            </a>
+          </div>
         </div>
         <div className="card__footer">
           <div className="card__footer__role">
@@ -52,6 +60,14 @@ const Copyright = () => {
           <div className="card__content__header">
             Allison
           </div>
+          <div className="card__content__social">
+            <a href="https://www.linkedin.com/in/allison-renaud/" target="_blank" rel="noreferrer noopener">
+              <img src="https://img.icons8.com/ios-glyphs/30/000000/linkedin.png"/>
+            </a>
+            <a href="https://github.com/AllisonRenaud" target="_blank" rel="noreferrer noopener">
+              <img src="https://img.icons8.com/ios-glyphs/30/000000/github.png"/>
+            </a>
+          </div>
         </div>
         <div className="card__footer">
           <div className="card__footer__role">
@@ -70,6 +86,14 @@ const Copyright = () => {
         <div className="card__content">
           <div className="card__content__header">
             Jérôme
+          </div>
+          <div className="card__content__social">
+            <a href="https://www.linkedin.com/in/jerome-karabenli-2b252b68/" target="_blank" rel="noreferrer noopener">
+              <img src="https://img.icons8.com/ios-glyphs/30/000000/linkedin.png"/>
+            </a>
+            <a href="https://github.com/jerome-karabenli" target="_blank" rel="noreferrer noopener">
+              <img src="https://img.icons8.com/ios-glyphs/30/000000/github.png"/>
+            </a>
           </div>
         </div>
         <div className="card__footer">
@@ -90,6 +114,14 @@ const Copyright = () => {
           <div className="card__content__header">
             Vincent
           </div>
+          <div className="card__content__social">
+            <a href="https://www.linkedin.com/in/vincent-payen-765a8a112/" target="_blank" rel="noreferrer noopener">
+              <img src="https://img.icons8.com/ios-glyphs/30/000000/linkedin.png"/>
+            </a>
+            <a href="https://github.com/VincentPn" target="_blank" rel="noreferrer noopener">
+              <img src="https://img.icons8.com/ios-glyphs/30/000000/github.png"/>
+            </a>
+          </div>
           </div>
             <div className="card__footer">
               <div className="card__footer__role">
@@ -104,6 +136,11 @@ const Copyright = () => {
             <div className="card__content">
               <div className="card__content__header">
                 Christophe
+              </div>
+              <div className="card__content__social">
+                <a href="https://github.com/Christophe-Salle" target="_blank" rel="noreferrer noopener">
+                  <img src="https://img.icons8.com/ios-glyphs/30/000000/github.png"/>
+                </a>
               </div>
             </div>
             <div className="card__footer">
